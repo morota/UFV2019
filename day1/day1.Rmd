@@ -389,6 +389,28 @@ Combination of above two (e.g., estimate proportion of additive genetic variance
 .right[[Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Manhattan_Plot.png)]
 
 
+---
+# Topics covered
+- Mixed model equations 
+
+- Reproducing kernel Hilbert space (RKHS) regression 
+
+- Shiny genomic prediction accuracy simulator
+
+- Genomic connectedness
+
+- Factor analytic model 
+
+- Longitudinal analysis & ShinyAIM
+
+- variance heterogeneity association analysis (vQTL/vGWAS)
+
+- Structural equation model GWAS (SEM-GWAS)
+
+- Medical Subject Headings (MeSH) analysis 
+
+
+
 
 
 ---
