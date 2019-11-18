@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+<meta name="author" content="Gota Morota" />
+
+<meta name="date" content="2019-11-18" />
+
+<title>Decoding mixed model equations</title>
+
+<script src="lab1_files/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="lab1_files/bootstrap-3.3.6/css/bootstrap.min.css" rel="stylesheet" />
+<script src="lab1_files/bootstrap-3.3.6/js/bootstrap.min.js"></script>
+<script src="lab1_files/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<script src="lab1_files/navigation-1.1/tabsets.js"></script>
+<script src="lab1_files/navigation-1.1/codefolding.js"></script>
+<link href="lab1_files/magnific-popup-1.1.0/magnific-popup.css" rel="stylesheet" />
+<script src="lab1_files/magnific-popup-1.1.0/jquery.magnific-popup.min.js"></script>
+<link href="lab1_files/readthedown-0.1/readthedown.css" rel="stylesheet" />
+<script src="lab1_files/readthedown-0.1/readthedown.js"></script>
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; background-color: #ffffff; color: #1f1c1b; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; background-color: #ffffff; color: #a0a0a0; border-right: 1px solid #a0a0a0; }
+td.sourceCode { padding-left: 5px; }
+pre, code { color: #1f1c1b; background-color: #ffffff; }
+code > span.kw { color: #1f1c1b; font-weight: bold; } /* Keyword */
+code > span.dt { color: #0057ae; } /* DataType */
+code > span.dv { color: #b08000; } /* DecVal */
+code > span.bn { color: #b08000; } /* BaseN */
+code > span.fl { color: #b08000; } /* Float */
+code > span.cn { color: #aa5500; } /* Constant */
+code > span.ch { color: #924c9d; } /* Char */
+code > span.sc { color: #3daee9; } /* SpecialChar */
+code > span.st { color: #bf0303; } /* String */
+code > span.vs { color: #bf0303; } /* VerbatimString */
+code > span.ss { color: #ff5500; } /* SpecialString */
+code > span.im { color: #ff5500; } /* Import */
+code > span.co { color: #898887; } /* Comment */
+code > span.do { color: #607880; } /* Documentation */
+code > span.an { color: #ca60ca; } /* Annotation */
+code > span.cv { color: #0095ff; } /* CommentVar */
+code > span.ot { color: #006e28; } /* Other */
+code > span.fu { color: #644a9b; } /* Function */
+code > span.va { color: #0057ae; } /* Variable */
+code > span.cf { color: #1f1c1b; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #1f1c1b; } /* Operator */
+code > span.bu { color: #644a9b; font-weight: bold; } /* BuiltIn */
+code > span.ex { color: #0095ff; font-weight: bold; } /* Extension */
+code > span.pp { color: #006e28; } /* Preprocessor */
+code > span.at { color: #0057ae; } /* Attribute */
+code > span.re { color: #0057ae; } /* RegionMarker */
+code > span.in { color: #b08000; } /* Information */
+code > span.wa { color: #bf0303; } /* Warning */
+code > span.al { color: #bf0303; font-weight: bold; } /* Alert */
+code > span.er { color: #bf0303; text-decoration: underline; } /* Error */
+code > span. { color: #1f1c1b; } /* Normal */
+</style>
+
+
+</head>
+
+<body>
+
+
+<div id="content" data-toggle="wy-nav-shift">
+
+<!-- tabsets -->
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+</script>
+
+<!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("hide" === "show");
+});
+</script>
+
+<nav id="nav-top" role="navigation" aria-label="top navigation">
+    <a role="button" href="#" data-toggle="wy-nav-top"><span class="glyphicon glyphicon-menu-hamburger"></span></a>
+</nav>
+
+<div class="btn-group pull-right">
+<button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="text-muted">Code</span> <span class="text-muted caret"></span></button>
+<ul class="dropdown-menu" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All</a></li>
+</ul>
+</div>
+
+<div id="header">
+<h1 class="title">Decoding mixed model equations</h1>
+<h1 class="subtitle">Quantitative Genetics Short Course <span class="citation">@UFV</span></h1>
+</div>
+
+
+<div id="table-of-contents">
+    <h2><a href="#content">Decoding mixed model equations</a></h2>
+    <div id="text-table-of-contents">
+      <ul>
+      <li><a href="#background">Background</a></li>
+      <li><a href="#data">Data</a></li>
+      <li><a href="#xx">X’X</a></li>
+      <li><a href="#xz">X’Z</a></li>
+      <li><a href="#zx">Z’X</a></li>
+      <li><a href="#zz">Z’Z</a></li>
+      <li><a href="#ratio-of-variance-components">Ratio of variance components</a></li>
+      <li><a href="#xy">X’y</a></li>
+      <li><a href="#zy">Z’y</a></li>
+      <li><a href="#building-lhs-and-rhs">Building LHS and RHS</a></li>
+      <li><a href="#solving-for-solutions">Solving for solutions</a></li>
+      <li><a href="#lme4-r-package">lme4 R package</a></li>
+      </ul>
+    </div>
+</div>
+
+<div id="main">
+<div id="background" class="section level2">
+<h2>Background</h2>
+<p>This is the day 1 computer lab session for quantitative genetic analysis. The goal of this exercise is to set up mixed model equations (MME) and obtain solutions for best linear unbiased estimator (BLUE) and best linear unbiased prediction (BLUP).</p>
+</div>
+<div id="data" class="section level2">
+<h2>Data</h2>
+<p>We are going to use the <code>australia.soybean</code> data included in the <a href="https://cran.r-project.org/web/packages/agridat/index.html">agridat</a> package. This dataset contains multi-environment trial of soybean in Australia for 58 variesties.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># install.packages(&#39;agridat&#39;)</span>
+<span class="kw">library</span>(agridat)
+<span class="kw">data</span>(australia.soybean, <span class="dt">package =</span> <span class="st">&quot;agridat&quot;</span>)
+
+<span class="st">`</span><span class="dt">?</span><span class="st">`</span>(australia.soybean)
+<span class="kw">head</span>(australia.soybean)</code></pre></div>
+<p>We will use <code>env</code> , <code>gen</code>, and <code>yield</code> columns in the current analysis. We can see that there are eight environments, each having 58 observatios. Also, each genotype is replicated eight times (one per environment).</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">dat &lt;-<span class="st"> </span>australia.soybean[, <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">4</span>, <span class="dv">5</span>)]
+<span class="kw">dim</span>(dat)
+<span class="kw">head</span>(dat)
+<span class="kw">table</span>(dat<span class="op">$</span>env)
+<span class="kw">table</span>(dat<span class="op">$</span>gen)
+<span class="kw">table</span>(dat<span class="op">$</span>env, dat<span class="op">$</span>gen)</code></pre></div>
+<p>The BLUP model we would like to set up is <span class="math display">\[ 
+\text{yield} =  \text{Intercept} +  \text{Environment} + \text{Genotype} + \text{Residual}
+\]</span> We can rewrite this as <span class="math display">\[ 
+\mathbf{y} = \mathbf{Xb} + \mathbf{Zu} + \boldsymbol{\epsilon}
+\]</span></p>
+<p>We will first create the variable <code>y</code> including a vector of yields.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">y &lt;-<span class="st"> </span>dat<span class="op">$</span>yield</code></pre></div>
+<p>We will now proceed to set up incident matrices. The incidence matrix <code>X</code> can be easily created using the <code>model.matrix</code> function.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">X &lt;-<span class="st"> </span><span class="kw">model.matrix</span>(<span class="op">~+</span>env, dat)
+<span class="kw">head</span>(X)
+<span class="kw">head</span>(dat)
+<span class="kw">tail</span>(X)
+<span class="kw">tail</span>(dat)</code></pre></div>
+<p>We will use the <code>model.matrix</code> function again to create the <code>Z</code> matrix.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">Z &lt;-<span class="st"> </span><span class="kw">model.matrix</span>(<span class="op">~-</span><span class="dv">1</span> <span class="op">+</span><span class="st"> </span>gen, dat)
+<span class="kw">head</span>(Z)
+<span class="kw">head</span>(dat)
+<span class="kw">tail</span>(Z)
+<span class="kw">tail</span>(dat)</code></pre></div>
+<p>We assume the following distribution. <span class="math display">\[ 
+\mathbf{u} \sim  N(0, \mathbf{I}\sigma^2_u), \text{ where } \sigma^2_u =  0.1990775 
+\]</span> <span class="math display">\[ 
+\boldsymbol{\epsilon} \sim  N(0, \mathbf{I}\sigma^2_{\epsilon}), \text{ where } \sigma^2_e =  0.2508898\\
+\]</span></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sigma2u &lt;-<span class="st"> </span><span class="fl">0.1990775</span>
+sigma2e &lt;-<span class="st"> </span><span class="fl">0.2508898</span></code></pre></div>
+<p>We wil now start building the elements of MME. Recall that MME is given by <img src="uni3.png" /></p>
+</div>
+<div id="xx" class="section level2">
+<h2>X’X</h2>
+<p>Creatig the X’X matrix.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">XtX &lt;-<span class="st"> </span><span class="kw">t</span>(X) <span class="op">%*%</span><span class="st"> </span>X
+XtX</code></pre></div>
+</div>
+<div id="xz" class="section level2">
+<h2>X’Z</h2>
+<p>Creating the X’Z matrix.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">XtZ &lt;-<span class="st"> </span><span class="kw">t</span>(X) <span class="op">%*%</span><span class="st"> </span>Z
+XtZ</code></pre></div>
+</div>
+<div id="zx" class="section level2">
+<h2>Z’X</h2>
+<p>Creating the Z’X matrix.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ZtX &lt;-<span class="st"> </span><span class="kw">t</span>(Z) <span class="op">%*%</span><span class="st"> </span>X
+ZtX</code></pre></div>
+</div>
+<div id="zz" class="section level2">
+<h2>Z’Z</h2>
+<p>Creating the Z’Z matrix.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ZtZ &lt;-<span class="st"> </span><span class="kw">t</span>(Z) <span class="op">%*%</span><span class="st"> </span>Z
+ZtZ</code></pre></div>
+</div>
+<div id="ratio-of-variance-components" class="section level2">
+<h2>Ratio of variance components</h2>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">I &lt;-<span class="st"> </span><span class="kw">diag</span>(<span class="kw">ncol</span>(Z))  <span class="co"># assuming K = I</span>
+lambda &lt;-<span class="st"> </span>sigma2e<span class="op">/</span>sigma2u</code></pre></div>
+</div>
+<div id="xy" class="section level2">
+<h2>X’y</h2>
+<p>Creating the X’y matrix.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">Xty &lt;-<span class="st"> </span><span class="kw">t</span>(X) <span class="op">%*%</span><span class="st"> </span>y
+Xty
+
+<span class="kw">sum</span>(y)</code></pre></div>
+</div>
+<div id="zy" class="section level2">
+<h2>Z’y</h2>
+<p>Creating the Z’y matrix.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">Zty &lt;-<span class="st"> </span><span class="kw">t</span>(Z) <span class="op">%*%</span><span class="st"> </span>y
+Zty</code></pre></div>
+</div>
+<div id="building-lhs-and-rhs" class="section level2">
+<h2>Building LHS and RHS</h2>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">LHS1 &lt;-<span class="st"> </span><span class="kw">cbind</span>(XtX, XtZ)
+LHS2 &lt;-<span class="st"> </span><span class="kw">cbind</span>(ZtX, ZtZ <span class="op">+</span><span class="st"> </span>I <span class="op">*</span><span class="st"> </span>lambda)
+LHS &lt;-<span class="st"> </span><span class="kw">rbind</span>(LHS1, LHS2)
+
+RHS &lt;-<span class="st"> </span><span class="kw">rbind</span>(Xty, Zty)</code></pre></div>
+</div>
+<div id="solving-for-solutions" class="section level2">
+<h2>Solving for solutions</h2>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sol &lt;-<span class="st"> </span><span class="kw">solve</span>(LHS, RHS)
+
+<span class="co"># BLUE</span>
+sol[<span class="dv">1</span><span class="op">:</span><span class="dv">8</span>, ]
+
+<span class="co"># BLUP</span>
+sol[<span class="dv">9</span><span class="op">:</span><span class="dv">15</span>, ]</code></pre></div>
+</div>
+<div id="lme4-r-package" class="section level2">
+<h2>lme4 R package</h2>
+<p>We can confirm our resutls using the <a href="https://cran.r-project.org/web/packages/lme4/index.html">lme4</a> R package.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># install.packages(&#39;lme4&#39;)</span>
+<span class="kw">library</span>(lme4)
+fit =<span class="st"> </span><span class="kw">lmer</span>(yield <span class="op">~</span><span class="st"> </span>env <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">|</span><span class="st"> </span>gen), <span class="dt">data =</span> dat)
+fit<span class="op">@</span>beta
+
+<span class="kw">rowMeans</span>(<span class="kw">ranef</span>(fit)<span class="op">$</span>gen)
+<span class="kw">rowMeans</span>(<span class="kw">ranef</span>(fit)<span class="op">$</span>gen)[<span class="dv">1</span><span class="op">:</span><span class="dv">7</span>]</code></pre></div>
+<p>The variance components can also be obtained.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">data.frame</span>((<span class="kw">summary</span>(fit))<span class="op">$</span>varcor)<span class="op">$</span>vcov</code></pre></div>
+<p>Recall that the broad-sense heritability is defined as <span class="math display">\[
+H^2 = \frac{\sigma^2_u}{ \sigma^2_u + \sigma^2_{\epsilon}/\text{rep}}.
+\]</span></p>
+<p>Thus, the estimate of <span class="math inline">\(H^2\)</span> in this population is</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sigma2u<span class="op">/</span>(sigma2u <span class="op">+</span><span class="st"> </span>sigma2e<span class="op">/</span><span class="dv">8</span>)</code></pre></div>
+</div>
+</div>
+
+
+</div>
+
+<div id="postamble" data-toggle="wy-nav-shift" class="status">
+<p class="author"><span class="glyphicon glyphicon-user"></span> Gota Morota</p>
+<p class="date"><span class="glyphicon glyphicon-calendar"></span> Nov. 18, 2019</p>
+</div>
+
+
+<script>
+$(document).ready(function () {
+ 	  });
+</script>
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

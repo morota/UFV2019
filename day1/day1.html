@@ -1,0 +1,1367 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+  <head>
+    <title>Quantitative Genetics Short Course @UFV</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Gota Morota  http://morotalab.org/" />
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
+    <link href="libs/remark-css/default-fonts.css" rel="stylesheet" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Quantitative Genetics Short Course <span class="citation">@UFV</span>
+## Decoding mixed model equations
+### Gota Morota <br /><a href="http://morotalab.org/" class="uri">http://morotalab.org/</a> <br />
+### 2019/11/18
+
+---
+
+
+
+
+
+
+# About me 
+![](map.png)
+
+
+
+---
+# IX SIGM @UFV October 2018
+.pull-left[
+&lt;img src="2018UFV2.jpg" width=650 height=420&gt;
+]
+
+.pull-right[
+&lt;img src="2018UFV3.jpg" width=700 height=350&gt;
+]
+
+---
+# IX SIGM @UFV October 2018
+.pull-left[
+&lt;img src="2018UFV2.jpg" width=650 height=420&gt;
+]
+
+.pull-right[
+&lt;img src="2018UFV3.jpg" width=700 height=350&gt;
+]
+
+
+---
+# Linear mixed model course @UFV October 2018
+&lt;img src="2018UFV6.jpg" width=650 height=450&gt;
+
+
+
+
+---
+# Special seminar @UFV July 2019
+.pull-left[
+&lt;img src="2019UFV1.jpg" width=600 height=400&gt;
+]
+
+.pull-right[
+&lt;img src="2019UFV2.jpg" width=600 height=400&gt;
+]
+
+---
+# Special seminar @UFV July 2019
+.pull-left[
+&lt;img src="2019UFV1.jpg" width=600 height=400&gt;
+]
+
+.pull-right[
+&lt;img src="2019UFV2.jpg" width=600 height=400&gt;
+]
+
+
+---
+# Special seminar @UFV July 2019
+&lt;img src="2019UFV4.jpg" width=700 height=450&gt;
+
+
+---
+class: inverse, center, middle
+
+# Quantitative Genetics
+
+--
+
+Analysis of complex or multifactorial traits 
+
+--
+
+All genes affect all traits - the question is by how much?
+
+--
+
+Infinitesimal model
+
+--
+
+Quasi-infinitesimal model, Oligogenic model
+
+
+---
+
+# What is quantitative genetics?
+
+--
+
+Population genetics
+- **Mathematics** is language of population genetics, **population genetics** is language of **evolution**.
+
+--
+
+Quantitative genetics 
+- **Statistics** is language of quantitative genetics, **quantitative genetics** is language of **complex trait genetics**. 
+
+--
+
+**Phenotypes** first in quantitative genetics
+
+In the era of genomics, phenotype is **king**
+
+
+&lt;center&gt;
+&lt;iframe src="https://giphy.com/embed/9ADoZQgs0tyww" width="400" height="200" frameBorder="0" class="giphy-embed" allowFullScreen&gt;&lt;/iframe&gt;&lt;p&gt;&lt;a href="https://giphy.com/gifs/obama-awesome-statistics-9ADoZQgs0tyww"&gt;via GIPHY&lt;/a&gt;&lt;/p&gt;
+&lt;/center&gt;
+
+
+
+---
+
+# Regression model
+Galton (1886). Regression towards mediocrity in hereditary stature
+"&lt;img src="galton1886.png" width=600 height=380&gt;
+
+
+
+
+
+
+
+
+---
+
+# Complex traits
+&lt;img src="phenotype-plant.png" width=800 height=530&gt;
+
+
+
+
+---
+# Genetic values
+Quantitative genetic model:
+
+`\begin{align*}
+\mathbf{y} &amp;= \mathbf{g} + \boldsymbol{\epsilon} \\
+\end{align*}`
+where `\(\mathbf{y}\)` is the vector of observed phenotypes, `\(\mathbf{g}\)` is the vector of genetic values, and `\(\boldsymbol{\epsilon}\)` is the vector of residuals. 
+
+Example:
+
+| Animal ID   | y           | g  |   e  |
+| ------------- |:-------------:| -----:|------|
+| 1      | 10 | ? |  ?     |
+| 2      |  7     |   ? |  ?    |
+| 3 | 12     |    ? |    ? |
+
+
+
+
+---
+# Genetic values
+Quantitative genetic model:
+
+`\begin{align*}
+\mathbf{y} &amp;= \mathbf{g} + \boldsymbol{\epsilon} \\
+\end{align*}`
+where `\(\mathbf{y}\)` is the vector of observed phenotypes, `\(\mathbf{g}\)` is the vector of genetic values, and `\(\boldsymbol{\epsilon}\)` is the vector of residuals. 
+
+Example:
+
+| Animal ID    | y           | g  |   e  |
+| ------------- |:-------------:| -----:|------|
+| 1      | 10 | 5 |  5     |
+| 2      |  7     |   6 |  1    |
+| 3 | 12     |    2 |    10 |
+
+
+--
+
+Phenotypes can be observed and measured but genotypic and additive genetic effects cannot
+
+
+
+
+
+---
+# Conventional Phenotyping
+![](ruler-plant.png)
+
+.pull-left[
+- labor intensive
+
+- prone to measurement error
+]
+
+.pull-right[
+&lt;iframe src="https://giphy.com/embed/Jk4ZT6R0OEUoM" width="500" height="160" frameBorder="0" class="giphy-embed" allowFullScreen&gt;&lt;/iframe&gt;&lt;p&gt;&lt;a href="https://giphy.com/gifs/Jk4ZT6R0OEUoM"&gt;via GIPHY&lt;/a&gt;&lt;/p&gt;
+]
+
+---
+# Genomic information (e.g., SNPs)
+![](SNPs.png)
+
+.center[Repeat of numbers 0, 1, and 2]
+
+
+
+
+
+---
+# Quantitative genetics
+Connecting phenotypic data with genomic information&lt;center&gt;
+&lt;div&gt;
+&lt;img src="plant.png" width=200 height=100&gt;
+=
+&lt;img src="SNPs.png" width=200 height=100&gt; + error 
+&lt;/div&gt;
+&lt;/center&gt;
+`\begin{align*}
+\mathbf{y} &amp;= \mathbf{g} + \boldsymbol{\epsilon} \\
+ &amp;\approx \mathbf{W}\mathbf{a} + \boldsymbol{\epsilon} 
+\end{align*}`
+We approximate unknown `\(\mathbf{g}\)` with `\(\mathbf{Wa}\)`. 
+`\begin{align*}
+\underbrace{\begin{bmatrix}    
+y_1\\
+y_2\\
+\vdots \\
+y_n\end{bmatrix}}_{n \times 1}  
+&amp;= \underbrace{\begin{bmatrix}
+   w_{11} &amp; w_{12} &amp; \cdots &amp; w_{1m} \\
+    w_{21} &amp; w_{22} &amp; \cdots &amp; w_{2m} \\
+    \vdots &amp; \vdots &amp; \ddots &amp; \vdots \\
+    w_{n1} &amp; w_{n2} &amp; \cdots &amp; w_{nm}
+\end{bmatrix}}_{n \times m} \quad
+\underbrace{\begin{bmatrix}
+a_1\\
+a_2\\
+\vdots \\
+a_m\end{bmatrix}}_{m \times 1} 
++\underbrace{\begin{bmatrix}
+\epsilon_1\\
+\epsilon_2\\
+\vdots \\
+\epsilon_m\end{bmatrix}}_{n \times 1} 
+\end{align*}`
+
+where `\(n\)` is the number of individuals (e.g., accessions) and `\(m\)` is the number of SNPs. 
+
+
+
+
+---
+# Precision agriculture using advanced technologies
+![](precision-plant.png)
+
+
+
+---
+# Precision (digital) phenotyping
+![](plant-digit.png)
+
+
+.pull-left[
+- automated process
+
+- less labor intensive
+
+- less prone to measurement error
+]
+
+.pull-right[
+&lt;iframe src="https://giphy.com/embed/wW95fEq09hOI8" width="400" height="160" frameBorder="0" class="giphy-embed" allowFullScreen&gt;&lt;/iframe&gt;&lt;p&gt;&lt;a href="https://giphy.com/gifs/chihuahua-funny-cute-wW95fEq09hOI8"&gt;via GIPHY&lt;/a&gt;&lt;/p&gt;
+]
+
+
+---
+# Image phenotypes
+![](plant_01.png)
+&amp;nbsp;
+&amp;nbsp;
+![](plant_02.jpg)
+
+.center[Image data]
+
+
+
+
+---
+# Quantitative genetics
+Connecting image data with genomic information 
+&lt;center&gt;
+&lt;div&gt;
+&lt;img src="plant_01.png" width=100 height=100&gt;
+=
+&lt;img src="SNPs.png" width=100 height=100&gt; + error 
+&lt;/div&gt;
+&lt;/center&gt;
+`\begin{align*}
+\mathbf{y} &amp;= \mathbf{g} + \boldsymbol{\epsilon} \\
+ &amp;\approx \mathbf{W}\mathbf{a} + \boldsymbol{\epsilon} 
+\end{align*}`
+We approximate unknown `\(\mathbf{g}\)` with `\(\mathbf{Wa}\)`. 
+`\begin{align*}
+\underbrace{\begin{bmatrix}    
+y_1\\
+y_2\\
+\vdots \\
+y_n\end{bmatrix}}_{n \times 1}  
+&amp;= \underbrace{\begin{bmatrix}
+   w_{11} &amp; w_{12} &amp; \cdots &amp; w_{1m} \\
+    w_{21} &amp; w_{22} &amp; \cdots &amp; w_{2m} \\
+    \vdots &amp; \vdots &amp; \ddots &amp; \vdots \\
+    w_{n1} &amp; w_{n2} &amp; \cdots &amp; w_{nm}
+\end{bmatrix}}_{n \times m} \quad
+\underbrace{\begin{bmatrix}
+a_1\\
+a_2\\
+\vdots \\
+a_m\end{bmatrix}}_{m \times 1} 
++\underbrace{\begin{bmatrix}
+\epsilon_1\\
+\epsilon_2\\
+\vdots \\
+\epsilon_m\end{bmatrix}}_{n \times 1} 
+\end{align*}`
+
+where `\(n\)` is the number of individuals (e.g., accessions) and `\(m\)` is the number of SNPs. 
+
+
+
+
+
+---
+# Big in n or m?
+![](equation-plant1.png)
+- `\(n\)`: number of individuals (records)
+
+- `\(m\)` number of SNPs (genetic markers)
+
+
+
+
+
+---
+# Prediction vs. Inference
+Complex traits are controlled by large number of genes with small effects, and  influenced by both genetics and environments
+
+- Inference (location)
+    - average effects of allele substitution
+
+- Inference (variability)
+   - variance component estimation
+   - genomic heritability
+  
+Combination of above two (e.g., estimate proportion of additive genetic variance explained by QTLs)
+
+- Prediction 
+    - genomic selection
+    - prediction of yet-to-be observed phenotypes
+
+
+
+---
+# Prediction vs. Inference 
+&lt;div align="center"&gt;
+&lt;img src="Lo2015PNAS.png" width=900 height=400&gt;
+&lt;/div&gt;
+
+* [http://www.pnas.org/content/112/45/13892.abstract
+](http://www.pnas.org/content/112/45/13892.abstract
+)
+
+
+
+
+---
+# GWAS vs. Prediction
+![](https://upload.wikimedia.org/wikipedia/commons/1/12/Manhattan_Plot.png)
+.right[[Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Manhattan_Plot.png)]
+
+
+
+
+---
+# Single trait linear mixed model 
+`$$\mathbf{y = Xb + Zu + e}$$`
+&lt;div align="center"&gt;
+&lt;img src="uni1.png" width=270 height=100&gt;
+&lt;/div&gt;
+
+- `\(\mathbf{X}\)`: incidence matrix of systematic effects
+
+- `\(\mathbf{Z}\)`: incidence matrix of random effects 
+
+- `\(\mathbf{K}\)`: genomic relationship matrix
+
+- `\(\mathbf{R}\)`: residual relationship matrix 
+
+- `\(\sigma^2_{u}\)`: genomic variance; `\(\sigma^2_{e}\)`: residual variance
+
+- BLUE: `\(\hat{\mathbf{b}} = (\mathbf{X'V^{-1}X})^{-}\mathbf{X'V^{-1}y}\)`; BLUP: `\(\hat{\mathbf{u}} = \mathbf{KZ'}\mathbf{V^{-1}}(\mathbf{y - X\hat{b}})\)`
+
+- where `\(\mathbf{V} = \mathbf{ZK\sigma^2_{u}Z' + R\sigma^2_{e}}\)`
+
+---
+# Mixed model equations (Henderson)
+The corresponding mixed model equations (MME) are
+![](uni2.png)
+
+- `\(\mathbf{G}^* = \sigma^2_u \mathbf{K}\)`
+
+- `\(\mathbf{R}^* = \sigma^2_e \mathbf{R}\)`
+
+If we multipy `\(\mathbf{R}^* = \sigma^2_e\mathbf{I}\)` to the both sides
+![](uni3.png)
+
+where `\(\lambda = \sigma^2_e / \sigma^2_u\)`
+
+- MME produces BLUE (E-BLUE) and BLUP (E-BLUP) simultaneously 
+
+
+---
+# Decoding single trait MME
+| N | Phe  | Env           | Gen  | 
+| ------------- |:-------------:| -----:| -----:|
+|1| 47      | E1 | G1 |
+|2| 51      |  E1     |   G2 |
+|3| 46 | E1     |    G3 |
+|4| 58 | E1     |    G4 |
+|5| 52 | E2     |    G1 |
+|6| 46 | E2     |    G2 |
+|7| 52 | E2     |    G3 |
+|8| 54 | E2     |    G4 |
+|9| 53 | E3     |    G1 |
+|10| 48 | E3     |    G2 |
+|11| 58 | E3     |    G3 |
+|12| 52 | E3    |    G4 |
+
+
+- Credit: [Alencar Xavier @Corteva](http://alenxav.wixsite.com/home)
+
+---
+# What is X?
+| N | EnvE1  | EnvE2           | EnvE3  | 
+| ------------- |:-------------:| -----:| -----:|
+|1| 1     | 0 | 0 |
+|2| 1      | 0     |   0 |
+|3| 1 | 0     |    0 |
+|4| 1 | 0     |    0 |
+|5| 0 | 1     |    0 |
+|6| 0 | 1     |    0 |
+|7| 0 | 1     |    0 |
+|8| 0 | 1     |    0 |
+|9| 0 | 0     |    1 |
+|10| 0 | 0     |    1 |
+|11| 0 | 0     |    1 |
+|12| 0 | 0    |    1 |
+
+- `\(\mathbf{X}\)` is the 12 x 3 matrix
+
+---
+# What is Z?
+| N | GenG1  | GenG2           | GenG3  | GenG4 | 
+| ------------- |:-------------:| -----:| -----:| -----:|
+|1| 1     | 0 | 0 |0 |
+|2| 0      | 1    |   0 |0 |
+|3| 0 | 0     |    1 |0 |
+|4| 0 | 0     |    0 |1 |
+|5| 1 | 0     |    0 |0 |
+|6| 0 | 1     |    0 |0 |
+|7| 0 | 0     |    1 |0 |
+|8| 0 | 0     |    0 |1 |
+|9| 1 | 0     |    0 |0 |
+|10| 0 | 1     |    0 |0 |
+|11| 0 | 0     |    1 |0 |
+|12| 0 | 0    |    0 |1 |
+
+- `\(\mathbf{Z}\)` is the 12 x 4 matrix
+
+
+---
+# What is X'X?
+
+- `\(\mathbf{X'}\)` is the 3 x 12 matrix
+
+- `\(\mathbf{X}\)` is the 12 x 3 matrix
+
+- `\(\mathbf{X'X}\)` is the 3 x 3 matrix
+
+|  | EnvE1  | EnvE2           | EnvE3  | 
+| ------------- |:-------------:| -----:| -----:|
+|EnvE1| 4     | 0 | 0 |
+|EnvE2| 0      | 4     |   0 |
+|EnvE3| 0 | 0     |    4 |
+
+--
+
+- `\(\mathbf{X'X}\)` is the 3 x 3 diagonal matrix counting the number of phenotypes observed in each environment 
+
+
+---
+# What is X'Z?
+
+- `\(\mathbf{X'}\)` is the 3 x 12 matrix
+
+- `\(\mathbf{Z}\)` is the 12 x 4 matrix
+
+- `\(\mathbf{X'Z}\)` is the 3 x 4 matrix
+
+|  | GenG1  | GenG2           | GenG3  | GenG4 | 
+| ------------- |:-------------:| -----:| -----:| -----:|
+|EnvE1| 1     | 1 | 1 |1 |
+|EnvE2| 1      | 1    |   1 |1 |
+|EnvE3| 1 | 1     |    1 |1 |
+
+--
+
+- `\(\mathbf{X'Z}\)` is the 3 x 4 matrix counting the number of each genotype in each environment 
+
+
+
+---
+# What is Z'X?
+- `\(\mathbf{Z'}\)` is the 4 x 12 matrix
+
+- `\(\mathbf{X}\)` is the 12 x 3 matrix
+
+- `\(\mathbf{X'Z}\)` is the 4 x 3 matrix
+
+|  | EnvE1  | EnvE2           | EnvE3  | 
+| ------------- |:-------------:| -----:| -----:|
+|GenG1| 1     | 1 | 1 |
+|GenG2| 1      | 1     |   1 |
+|GenG3| 1 | 1     |    1 |
+|GenG4| 1 | 1     |    1 |
+
+- `\(\mathbf{Z'X}\)` is the 4 x 3 matrix counting the number of each genotype in each environment 
+
+
+---
+# What is Z'Z?
+- `\(\mathbf{Z'}\)` is the 4 x 12 matrix
+
+- `\(\mathbf{Z}\)` is the 12 x 4 matrix
+
+- `\(\mathbf{Z'Z}\)` is the 4 x 4 matrix
+
+|  | GenG1  | GenG2           | GenG3  | GenG4 | 
+| ------------- |:-------------:| -----:| -----:| -----:|
+|GenG1| 3     | 0 | 0 |0 |
+|GenG2| 0      | 3   |   0 |0 |
+|GenG3| 0 | 0     |    3 |0 |
+|GenG4| 0 |0     |    0 |3|
+
+- `\(\mathbf{Z'Z}\)` is the 4 x 4 diagonal matrix counting the number of phenotypes observed for each genotype 
+
+
+---
+# What is Z'Z + `\(\lambda \mathbf{K}^{-1}\)`?
+- `\(\mathbf{Z'}\)` is the 4 x 12 matrix
+
+- `\(\mathbf{Z}\)` is the 12 x 4 matrix
+
+- `\(\mathbf{Z'Z}\)` is the 4 x 4 matrix
+
+--
+
+- assume `\(\mathbf{K} = \mathbf{I}\)` (no relationship)
+
+- `\(\lambda = \sigma^2_e / \sigma^2_u = 1.64/9.56 = 0.17\)`
+
+--
+
+|  | GenG1  | GenG2           | GenG3  | GenG4 | 
+| ------------- |:-------------:| -----:| -----:| -----:|
+|GenG1| 3.17     | 0 | 0 |0 |
+|GenG2| 0      | 3.17   |   0 |0 |
+|GenG3| 0 | 0     |    3.17 |0 |
+|GenG4| 0 |0     |    0 |3.17|
+
+- `\(\mathbf{Z'Z} + \lambda \mathbf{I}\)` is the 4 x 4 diagonal matrix counting the number of phenotypes observed for each genotype + `\(\lambda\)` value in the diagonal elements
+
+---
+# What is the left hand side of MME?
+&lt;div align="center"&gt;
+&lt;img src="uni4.png" width=250 height=100&gt;
+&lt;/div&gt;
+
+
+|  | EnvE1  | EnvE2           | EnvE3  | GenG1  | GenG2  | GenG3  | GenG4  | 
+| ------------- |:-------------:| -----:| -----:|-----:| -----:|-----:| -----:|
+|EnvE1| 4     | 0 | 0 |1 |1 |1 |1 |
+|EnvE2| 0     | 4 | 0 |1 |1 |1 |1 |
+|EnvE3| 0     | 0 | 4 |1 |1 |1 |1 |
+|GenG1| 1      | 1     |   1 |3.17 |0 |0 |0 |
+|GenG2| 1      | 1     |   1 |0 |3.17 |0 |0 |
+|GenG3| 1 | 1     |    1 |0 |0 |3.17 |0 |
+|GenG4| 1 | 1     |    1 |0 |0 |0 |3.17 |
+
+
+
+---
+# What is X'y?
+- `\(\mathbf{X'}\)` is the 3 x 12 matrix
+
+- `\(\mathbf{y}\)` is the 12 x 1 matrix
+
+- `\(\mathbf{X'y}\)` is the 3 x 1 matrix
+
+|  |   | 
+| ------------- |:-------------:| 
+|EnvE1| 202     |
+|EnvE2| 204      | 
+|EnvE3| 211 | 
+
+--
+
+- `\(\mathbf{X'y}\)` is the 3 x1 matrix counting the sum of phenotypes in each environment
+
+---
+# What is Z'y?
+- `\(\mathbf{Z'}\)` is the 4 x 12 matrix
+
+- `\(\mathbf{y}\)` is the 12 x 1 matrix
+
+- `\(\mathbf{Z'y}\)` is the 4 x 1 matrix
+
+|  |   | 
+| ------------- |:-------------:| 
+|GenG1| 152     |
+|GenG2| 145      | 
+|GenG3| 156 | 
+|GenG4| 164 | 
+
+--
+
+- `\(\mathbf{Z'y}\)` is the 4 x1 matrix counting the sum of phenotypes for each genotype
+
+
+
+
+---
+# What is the right hand side of MME?
+&lt;div align="center"&gt;
+&lt;img src="uni5.png" width=100 height=100&gt;
+&lt;/div&gt;
+
+|  |   | 
+| ------------- |:-------------:| 
+|EnvE1| 202     |
+|EnvE2| 204      | 
+|EnvE3| 211 | 
+|GenG1| 152     |
+|GenG2| 145      | 
+|GenG3| 156 | 
+|GenG4| 164 | 
+
+
+---
+# Solutions
+![](uni6.png)
+
+|  |   | 
+| ------------- |:-------------:| 
+|EnvE1| 50.50     |
+|EnvE2| 51.00      | 
+|EnvE3| 52.75 | 
+|GenG1| -0.71     |
+|GenG2| -2.92      | 
+|GenG3| 0.55 | 
+|GenG4| 3.08 | 
+
+- These are BLUE and BLUP of environments and genotypes, respectively
+
+
+---
+# The role of lambda
+
+BLUE = sum / `\(n_{x}\)` = the sum of phenotypes in each environment / the number of phenotypes observed in each environment 
+
+- BLUE is simply computing averages 
+
+BLUP = sum / `\(n_{z} + \lambda\)` = the sum of phenotypes for each genotype / the number of phenotypes observed for each genotype + `\(\lambda\)`
+
+- BLUP is shrinked toward zero (proportional to `\(\lambda\)`)
+
+--
+
+Note that `\(\lambda = \frac{1-h^2}{h^2}\)`
+- More observations `\(\rightarrow\)` less shrinkage 
+
+- Higher heritability `\(\rightarrow\)` less shrinkage 
+
+
+---
+# Genomic relationship matrix
+1: The first type of `\(\mathbf{G}\)` matrix
+
+`\(\mathbf{G} = \frac{\mathbf{W_c}\mathbf{W_c'}}{\sum 2 p_j (1-p_j)}\)`
+
+- `\(\mathbf{W_c}\)`: centered marker matrix
+
+- `\(p_j\)`: allele frequency at `\(j\)`th marker 
+
+
+2: The second type of `\(\mathbf{G}\)` matrix
+
+`\(\mathbf{G} = \frac{\mathbf{W_{cs}}\mathbf{W_{cs}'}}{m}\)`
+
+- `\(\mathbf{W_{cs}}\)`: centered and scaled marker matrix
+
+- `\(m\)`: number of markers  
+
+
+---
+# Genomic relationship matrix
+![](diagonal.png)
+
+
+
+---
+# When relationships are known
+Suppose `\(\mathbf{K}\)` is given by 
+
+|  | GenG1  | GenG2           | GenG3  | GenG4 | 
+| ------------- |:-------------:| -----:| -----:| -----:|
+|GenG1| 1.00     | 0.64 | 0.23 |0.48 |
+|GenG2| 0.64      | 1.00   |   0.33 |0.67 |
+|GenG3| 0.23 | 0.33     |    1.00 |0.31 |
+|GenG4| 0.48 |0.67     |    0.31 |1.00|
+
+--
+
+Then `\(\lambda \mathbf{K}^{-1}\)` is
+
+|  | GenG1  | GenG2           | GenG3  | GenG4 | 
+| ------------- |:-------------:| -----:| -----:| -----:|
+|GenG1| 0.15     | -0.09 | 0.00 |-0.01 |
+|GenG2| -0.09      | 0.22   |   -0.02 |-0.10 |
+|GenG3| 0.00 | -0.02     |    0.10 |-0.02 |
+|GenG4| -0.01 |-0.10     |    -0.02 |0.17|
+
+- `\(\lambda = \sigma^2_e / \sigma^2_u = 1.64/17.70 = 0.09\)`
+
+
+
+---
+# What is the left hand side of MME?
+&lt;div align="center"&gt;
+&lt;img src="uni4.png" width=250 height=100&gt;
+&lt;/div&gt;
+
+
+|  | EnvE1  | EnvE2           | EnvE3  | GenG1  | GenG2  | GenG3  | GenG4  | 
+| ------------- |:-------------:| -----:| -----:|-----:| -----:|-----:| -----:|
+|EnvE1| 4     | 0 | 0 |1 |1 |1 |1 |
+|EnvE2| 0     | 4 | 0 |1 |1 |1 |1 |
+|EnvE3| 0     | 0 | 4 |1 |1 |1 |1 |
+|GenG1| 1      | 1     |   1 |3.15 |-0.09 |0.00 |-0.01 |
+|GenG2| 1      | 1     |   1 |-0.09 |3.22 |-0.02 |-0.10 |
+|GenG3| 1 | 1     |    1 |0.00 |-0.02 |3.10 |-0.02 |
+|GenG4| 1 | 1     |    1 |-0.01 |-0.10 |-0.02 |3.17 |
+
+
+
+
+---
+# When there are missing phenotypes
+.pull-left[
+| N | Phe  | Env           | Gen  | 
+| ------------- |:-------------:| -----:| -----:|
+|1| 47      | E1 | G1 |
+|2| 51      |  E1     |   G2 |
+|3| NA | E1     |    G3 |
+|4| 58 | E1     |    G4 |
+|5| 52 | E2     |    G1 |
+|6| 46 | E2     |    G2 |
+|7| 52 | E2     |    G3 |
+|8| NA | E2     |    G4 |
+|9| 53 | E3     |    G1 |
+|10| 48 | E3     |    G2 |
+|11| 58 | E3     |    G3 |
+|12| 52 | E3    |    G4 |
+]
+
+.pull-right[
+&lt;iframe src="https://giphy.com/embed/3o85xpBDDNSAQsbu2A" width="480" height="360" frameBorder="0" class="giphy-embed" allowFullScreen&gt;&lt;/iframe&gt;&lt;p&gt;&lt;a href="https://giphy.com/gifs/afvbabies-babies-afv-3o85xpBDDNSAQsbu2A"&gt;via GIPHY&lt;/a&gt;&lt;/p&gt;
+]
+
+
+---
+# What is X?
+
+| N | EnvE1  | EnvE2           | EnvE3  | 
+| ------------- |:-------------:| -----:| -----:|
+|1| 1     | 0 | 0 |
+|2| 1      | 0     |   0 |
+|4| 1 | 0     |    0 |
+|5| 0 | 1     |    0 |
+|6| 0 | 1     |    0 |
+|7| 0 | 1     |    0 |
+|9| 0 | 0     |    1 |
+|10| 0 | 0     |    1 |
+|11| 0 | 0     |    1 |
+|12| 0 | 0    |    1 |
+
+- Remove missing rows
+
+- `\(\mathbf{X}\)` is the 10 x 3 matrix
+
+
+---
+# What is Z?
+
+| N | GenG1  | GenG2           | GenG3  | GenG4 | 
+| ------------- |:-------------:| -----:| -----:| -----:|
+|1| 1     | 0 | 0 |0 |
+|2| 0      | 1    |   0 |0 |
+|4| 0 | 0     |    0 |1 |
+|5| 1 | 0     |    0 |0 |
+|6| 0 | 1     |    0 |0 |
+|7| 0 | 0     |    1 |0 |
+|9| 1 | 0     |    0 |0 |
+|10| 0 | 1     |    0 |0 |
+|11| 0 | 0     |    1 |0 |
+|12| 0 | 0    |    0 |1 |
+
+- Remove missing rows
+
+- `\(\mathbf{Z}\)` is the 10 x 4 matrix
+
+
+
+
+
+
+
+---
+# What is X'X?
+
+- `\(\mathbf{X'}\)` is the 3 x 10 matrix
+
+- `\(\mathbf{X}\)` is the 10 x 3 matrix
+
+- `\(\mathbf{X'X}\)` is the 3 x 3 matrix
+
+|  | EnvE1  | EnvE2           | EnvE3  | 
+| ------------- |:-------------:| -----:| -----:|
+|EnvE1| 3     | 0 | 0 |
+|EnvE2| 0      | 3     |   0 |
+|EnvE3| 0 | 0     |    4 |
+
+--
+
+- `\(\mathbf{X'X}\)` is the 3 x 3 diagonal matrix counting the number of phenotypes observed in each environment 
+
+
+---
+# What is X'Z?
+
+- `\(\mathbf{X'}\)` is the 3 x 10 matrix
+
+- `\(\mathbf{Z}\)` is the 10 x 4 matrix
+
+- `\(\mathbf{X'Z}\)` is the 3 x 4 matrix
+
+|  | GenG1  | GenG2           | GenG3  | GenG4 | 
+| ------------- |:-------------:| -----:| -----:| -----:|
+|EnvE1| 1     | 1 | 0 |1 |
+|EnvE2| 1      | 1    |   1 |0 |
+|EnvE3| 1 | 1     |    1 |1 |
+
+--
+
+- `\(\mathbf{X'Z}\)` is the 3 x 4 matrix counting the number of each genotype in each environment 
+
+
+
+---
+# What is Z'X?
+- `\(\mathbf{Z'}\)` is the 4 x 10 matrix
+
+- `\(\mathbf{X}\)` is the 10 x 3 matrix
+
+- `\(\mathbf{X'Z}\)` is the 4 x 3 matrix
+
+|  | EnvE1  | EnvE2           | EnvE3  | 
+| ------------- |:-------------:| -----:| -----:|
+|GenG1| 1     | 1 | 1 |
+|GenG2| 1      | 1     |   1 |
+|GenG3| 0 | 1     |    1 |
+|GenG4| 1 | 0     |    1 |
+
+- `\(\mathbf{Z'X}\)` is the 4 x 3 matrix counting the number of each genotype in each environment 
+
+
+
+
+
+---
+# What is Z'Z?
+- `\(\mathbf{Z'}\)` is the 4 x 10 matrix
+
+- `\(\mathbf{Z}\)` is the 4 x 10 matrix
+
+- `\(\mathbf{Z'Z}\)` is the 4 x 4 matrix
+
+|  | GenG1  | GenG2           | GenG3  | GenG4 | 
+| ------------- |:-------------:| -----:| -----:| -----:|
+|GenG1| 3     | 0 | 0 |0 |
+|GenG2| 0      | 3   |   0 |0 |
+|GenG3| 0 | 0     |    2 |0 |
+|GenG4| 0 |0     |    0 |2|
+
+- `\(\mathbf{Z'Z}\)` is the 4 x 4 diagonal matrix counting the number of phenotypes observed for each genotype 
+
+
+
+---
+# What is the left hand side of MME?
+&lt;div align="center"&gt;
+&lt;img src="uni4.png" width=250 height=100&gt;
+&lt;/div&gt;
+
+
+|  | EnvE1  | EnvE2           | EnvE3  | GenG1  | GenG2  | GenG3  | GenG4  | 
+| ------------- |:-------------:| -----:| -----:|-----:| -----:|-----:| -----:|
+|EnvE1| 3     | 0 | 0 |1 |1 |0 |1 |
+|EnvE2| 0     | 3 | 0 |1 |1 |1 |0 |
+|EnvE3| 0     | 0 | 4 |1 |1 |1 |1 |
+|GenG1| 1      | 1     |   1 |3.10 |-0.06 |0.00 |-0.01 |
+|GenG2| 1      | 1     |   1 |-0.06 |3.15 |-0.01 |-0.07 |
+|GenG3| 0 | 1     |    1 |0.00 |-0.01 |2.07 |-0.01 |
+|GenG4| 1 | 0     |    1 |-0.01 |-0.07 |-0.01 |2.11 |
+
+- `\(\lambda = \sigma^2_e / \sigma^2_u = 1.64/19.61 = 0.06\)`
+
+
+---
+# What is the right hand side of MME?
+&lt;div align="center"&gt;
+&lt;img src="uni5.png" width=100 height=100&gt;
+&lt;/div&gt;
+
+|  |   | 
+| ------------- |:-------------:| 
+|EnvE1| 156     |
+|EnvE2| 150      | 
+|EnvE3| 211 | 
+|GenG1| 152     |
+|GenG2| 145      | 
+|GenG3| 110 | 
+|GenG4| 110 | 
+
+
+
+---
+# The first genotype is missing phenotypes
+.pull-left[
+| N | Phe  | Env           | Gen  | 
+| ------------- |:-------------:| -----:| -----:|
+|1| NA      | E1 | G1 |
+|2| 51      |  E1     |   G2 |
+|3| 46 | E1     |    G3 |
+|4| 58 | E1     |    G4 |
+|5| NA | E2     |    G1 |
+|6| 46 | E2     |    G2 |
+|7| 52 | E2     |    G3 |
+|8| 54 | E2     |    G4 |
+|9| NA | E3     |    G1 |
+|10| 48 | E3     |    G2 |
+|11| 58 | E3     |    G3 |
+|12| 52 | E3    |    G4 |
+]
+
+.pull-right[
+&lt;center&gt;
+&lt;iframe src="https://giphy.com/embed/lKZEeXJGhU1d6" width="300" height="350" frameBorder="0" class="giphy-embed" allowFullScreen&gt;&lt;/iframe&gt;&lt;p&gt;&lt;a href="https://giphy.com/gifs/scared-despicable-me-lKZEeXJGhU1d6"&gt;via GIPHY&lt;/a&gt;
+&lt;/p&gt;
+&lt;/center&gt;
+]
+
+---
+# What is X?
+| N | EnvE1  | EnvE2           | EnvE3  | 
+| ------------- |:-------------:| -----:| -----:|
+|2| 1      | 0     |   0 |
+|3| 1 | 0     |    0 |
+|4| 1 | 0     |    0 |
+|6| 0 | 1     |    0 |
+|7| 0 | 1     |    0 |
+|8| 0 | 1     |    0 |
+|10| 0 | 0     |    1 |
+|11| 0 | 0     |    1 |
+|12| 0 | 0    |    1 |
+
+- Remove missing rows
+
+- `\(\mathbf{X}\)` is the 9 x 3 matrix
+
+---
+# What is Z?
+| N | GenG1  | GenG2           | GenG3  | GenG4 | 
+| ------------- |:-------------:| -----:| -----:| -----:|
+|2| 0      | 1    |   0 |0 |
+|3| 0 | 0     |    1 |0 |
+|4| 0 | 0     |    0 |1 |
+|6| 0 | 1     |    0 |0 |
+|7| 0 | 0     |    1 |0 |
+|8| 0 | 0     |    0 |1 |
+|10| 0 | 1     |    0 |0 |
+|11| 0 | 0     |    1 |0 |
+|12| 0 | 0    |    0 |1 |
+
+- Remove missing rows
+
+- `\(\mathbf{Z}\)` is the 9 x 4 matrix
+
+
+
+
+---
+# What is X'X?
+
+- `\(\mathbf{X'}\)` is the 3 x 9 matrix
+
+- `\(\mathbf{X}\)` is the 9 x 3 matrix
+
+- `\(\mathbf{X'X}\)` is the 3 x 3 matrix
+
+|  | EnvE1  | EnvE2           | EnvE3  | 
+| ------------- |:-------------:| -----:| -----:|
+|EnvE1| 3     | 0 | 0 |
+|EnvE2| 0      | 3     |   0 |
+|EnvE3| 0 | 0     |    3 |
+
+--
+
+- `\(\mathbf{X'X}\)` is the 3 x 3 diagonal matrix counting the number of phenotypes observed in each environment 
+
+
+---
+# What is X'Z?
+
+- `\(\mathbf{X'}\)` is the 3 x 9 matrix
+
+- `\(\mathbf{Z}\)` is the 9 x 4 matrix
+
+- `\(\mathbf{X'Z}\)` is the 3 x 4 matrix
+
+|  | GenG1  | GenG2           | GenG3  | GenG4 | 
+| ------------- |:-------------:| -----:| -----:| -----:|
+|EnvE1| 0     | 1 | 1 |1 |
+|EnvE2| 0      | 1    |   1 |1 |
+|EnvE3| 0 | 1     |    1 |1 |
+
+--
+
+- `\(\mathbf{X'Z}\)` is the 3 x 4 matrix counting the number of each genotype in each environment 
+
+
+
+---
+# What is Z'X?
+- `\(\mathbf{Z'}\)` is the 4 x 12 matrix
+
+- `\(\mathbf{X}\)` is the 12 x 3 matrix
+
+- `\(\mathbf{X'Z}\)` is the 4 x 3 matrix
+
+|  | EnvE1  | EnvE2           | EnvE3  | 
+| ------------- |:-------------:| -----:| -----:|
+|GenG1| 0     | 0 | 0 |
+|GenG2| 1      | 1     |   1 |
+|GenG3| 1 | 1     |    1 |
+|GenG4| 1 | 1     |    1 |
+
+- `\(\mathbf{Z'X}\)` is the 4 x 3 matrix counting the number of each genotype in each environment 
+
+
+---
+# What is Z'Z?
+- `\(\mathbf{Z'}\)` is the 4 x 9 matrix
+
+- `\(\mathbf{Z}\)` is the 4 x 9 matrix
+
+- `\(\mathbf{Z'Z}\)` is the 4 x 4 matrix
+
+|  | GenG1  | GenG2           | GenG3  | GenG4 | 
+| ------------- |:-------------:| -----:| -----:| -----:|
+|GenG1| 0     | 0 | 0 |0 |
+|GenG2| 0      | 3   |   0 |0 |
+|GenG3| 0 | 0     |    3 |0 |
+|GenG4| 0 |0     |    0 |3|
+
+- `\(\mathbf{Z'Z}\)` is the 4 x 4 diagonal matrix counting the number of phenotypes observed for each genotype 
+
+
+---
+# What is the left hand side of MME?
+&lt;div align="center"&gt;
+&lt;img src="uni4.png" width=250 height=100&gt;
+&lt;/div&gt;
+
+
+|  | EnvE1  | EnvE2           | EnvE3  | GenG1  | GenG2  | GenG3  | GenG4  | 
+| ------------- |:-------------:| -----:| -----:|-----:| -----:|-----:| -----:|
+|EnvE1| 3     | 0 | 0 |0 |1 |0 |1 |
+|EnvE2| 0     | 3 | 0 |0 |1 |1 |0 |
+|EnvE3| 0     | 0 | 3 |0 |1 |1 |1 |
+|GenG1| 0      | 0     |   0 |0.14 |-0.08 |0.00 |-0.01 |
+|GenG2| 1      | 1     |   1 |-0.08 |3.19 |-0.02 |-0.09 |
+|GenG3| 0 | 1     |    1 |0.00 |-0.02 |3.09 |-0.01 |
+|GenG4| 1 | 0     |    1 |-0.01 |-0.09 |-0.01 |3.15 |
+
+- `\(\lambda = \sigma^2_e / \sigma^2_u = 1.79/22.78 = 0.08\)`
+
+
+---
+# What is the right hand side of MME?
+&lt;div align="center"&gt;
+&lt;img src="uni5.png" width=100 height=100&gt;
+&lt;/div&gt;
+
+|  |   | 
+| ------------- |:-------------:| 
+|EnvE1| 155    |
+|EnvE2| 152      | 
+|EnvE3| 158 | 
+|GenG1| 0     |
+|GenG2| 145      | 
+|GenG3| 156 | 
+|GenG4| 164 | 
+
+---
+# Solutions
+![](uni6.png)
+
+|  |   | 
+| ------------- |:-------------:| 
+|EnvE1| 52.06     |
+|EnvE2| 51.06      | 
+|EnvE3| 53.06 | 
+|GenG1| -1.82     |
+|GenG2| -3.48      | 
+|GenG3| -0.07 | 
+|GenG4| 2.38 | 
+
+- These are BLUE and BLUP of environments and genotypes, respectively
+
+
+
+---
+# Dimension of left hand side
+&lt;div align="center"&gt;
+&lt;img src="equDecoded.png" width=300 height=250&gt;
+&lt;/div&gt;
+
+
+.pull-left[
+- s: number of unique fixed effects
+
+- q: number of unique genotypes
+
+- does not depend on `\(n\)`
+]
+
+.pull-right[
+&lt;center&gt;
+&lt;iframe src="https://giphy.com/embed/UgD64OxiNyTBK" width="421" height="250" frameBorder="0" class="giphy-embed" allowFullScreen&gt;&lt;/iframe&gt;&lt;p&gt;&lt;a href="https://giphy.com/gifs/funny-lol-guitarhero-UgD64OxiNyTBK"&gt;via GIPHY&lt;/a&gt;&lt;/p&gt;
+&lt;/center&gt;
+]
+
+
+---
+# Extending a linear mixed model for GWAS
+Previous model 
+`$$\mathbf{y = Xb + Zu + e}$$`
+&lt;/br&gt;
+
+Linear mixed model single-marker regression 
+`$$\mathbf{y = Xb + Wa + Zu + e}$$`
+
+- `\(\mathbf{W}\)`: marker matrix
+
+- `\(\mathbf{a}\)`: vector of marker effect
+
+
+---
+# Linear mixed model for GWAS 
+Single marker-based mixed model association (MMA)
+`\begin{align*}
+\mathbf{y} &amp;= \mu + \mathbf{w_ja_j} + \mathbf{Zg} + \boldsymbol{\epsilon} \\
+\mathbf{g} &amp;\sim N(0, \mathbf{G}\sigma^2_{g})
+\end{align*}`
+
+`\(\mathbf{G}\)` captures population structure and polygenic effects
+
+
+--
+
+Double counting?
+
+--
+
+Alternatively, 
+`\begin{align*}
+\mathbf{y} &amp;= \mu + \mathbf{w_ja_j} + \mathbf{Zg} + \boldsymbol{\epsilon} \\
+\mathbf{g} &amp;\sim N(0, \mathbf{G}_{-k}\sigma^2_{g_{-k}})
+\end{align*}`
+where `\(-k\)` denotes the `\(k\)`th chromosome removed
+
+See
+* Rincent et al. 2014. ([10.1534/genetics.113.159731](https://doi.org/10.1534/genetics.113.159731))
+
+* Chen and Lipka. 2016. ([10.1534/g3.116.029090](https://doi.org/10.1534/g3.116.029090))
+
+
+---
+# How to solve the linear mixed model?
+
+1:  Mixed model equations (MME)
+`\begin{align*}
+\mathbf{y} &amp;= \mu + \mathbf{w_ja_j} + \mathbf{Zg} + \boldsymbol{\epsilon} \\
+\end{align*}`
+
+The mixed model equations of [Henderson (1949)](http://morotalab.org/literature/pdf/henderson1949.pdf) are given by 
+
+&lt;div align="center"&gt;
+&lt;img src="MME2.png" width=600 height=100&gt;
+&lt;/div&gt;
+
+2:  Weighted least squares
+`\begin{align*}
+  \hat{\mathbf{a}} &amp;= (\mathbf{W'U T U'W})^{-1}\mathbf{W'U} \mathbf{T} \mathbf{U'y} 
+\end{align*}`
+where
+
+- `\(\mathbf{U}\)`: eigenvectors of the `\(\mathbf{G}\)` matrix
+- `\(\mathbf{D}\)`: eigenvalues of the `\(\mathbf{G}\)` matrix
+
+`\begin{align*}
+\mathbf{T} = [\mathbf{D}  + \lambda \mathbf{I}  ]^{-1}
+\end{align*}`
+
+
+---
+# Important literature
+Animal 
+
+* [Kennedy et al. 1992.](https://doi.org/10.2527/1992.7072000x) Estimation of effects of single genes on quantitative traits. J Anim Sci. 70:2000-2012.
+
+Plant 
+
+* [Yu et al. 2006.](https://dx.doi.org/10.1038/ng1702) A unified mixed-model method for association mapping that accounts for multiple levels of relatedness. Nat Genet. 38:203-208. 
+
+
+
+---
+# Bibliography
+![](biblio.png)
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();</script>
+
+<script>
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
