@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+  <head>
+    <title>Interactive visualization for longitudinal GWAS</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Gota Morota  http://morotalab.org/" />
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
+    <link href="libs/remark-css/default-fonts.css" rel="stylesheet" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Interactive visualization for longitudinal GWAS
+## Quantitative Genetics Short Course <span class="citation">@UFV</span>
+### Gota Morota <br /><a href="http://morotalab.org/" class="uri">http://morotalab.org/</a> <br />
+### 2019/11/19
+
+---
+
+
+
+
+
+
+
+
+
+# Interactive visualization in a nutshell
+Example 
+[Collision Detection](https://bl.ocks.org/mbostock/raw/3231298/)
+
+
+---
+class: small, left, top
+## Why Interactive Visualization?
+
+Interactivity allows users to
+  
+* ####Focus on detail:
+
+  * Select and Zoom into a visualization
+  * Hover over to get the exact information
+
+* ####Enhance User experience:
+
+  * Provide a tool for viewers to explore your data
+  * User can actively select areas of interest in a chart
+  * Users can get a summary of the relevant data
+
+* ####Pose multiple questions:
+
+    * Switch axes or to add confabulating factors
+    * Break down responses to a specific question
+
+.footnote[Martin Hadley, 3 benefits of interactive visualization, https://campus.sagepub.com/blog/3-benefits-of-interactive-visualization]
+
+
+
+---
+# Plotly R graphing library 
+&lt;img src="plotly.png" width=700 height=450&gt;
+[https://plot.ly/r/](https://plot.ly/r/)
+
+
+
+---
+class: small, left, top
+## Why Interactive Visualization?
+
+#### Interactivity allows users to focus on detail:
+
+  * Select and Zoom into a visualization
+  * Hover over to get the exact information
+
+.footnote[Martin Hadley, 3 benefits of interactive visualization, https://campus.sagepub.com/blog/3-benefits-of-interactive-visualization]
+
+
+
+---
+# Scatter Plots 
+&lt;iframe src="p1.html" width="100%" height="540" id="igraph" scrolling="no" seamless="seamless" frameBorder="0"&gt; &lt;/iframe&gt;
+[https://plot.ly/r/line-and-scatter/](https://plot.ly/r/line-and-scatter/)
+
+---
+# Scatter and Line Plots 
+&lt;iframe src="p2.html" width="100%" height="540" id="igraph" scrolling="no" seamless="seamless" frameBorder="0"&gt; &lt;/iframe&gt;
+[https://plot.ly/r/line-and-scatter/](https://plot.ly/r/line-and-scatter/)
+
+---
+# Cumulative Lines Animation 
+&lt;iframe src="p3.html" width="100%" height="540" id="igraph" scrolling="no" seamless="seamless" frameBorder="0"&gt; &lt;/iframe&gt;
+[https://plot.ly/r/cumulative-animations/](https://plot.ly/r/cumulative-animations/)
+
+
+
+
+---
+class: small, left, top
+## Why Interactive Visualization?
+
+#### Interactivity allows enhanced user experience:
+
+  * Provide a tool for viewers to explore your data
+
+  * User can actively select areas of interest in a chart
+
+  * Users can get a summary of the relevant data
+
+.footnote[Martin Hadley, 3 benefits of interactive visualization, https://campus.sagepub.com/blog/3-benefits-of-interactive-visualization]
+
+
+---
+# Basic Range Slider and Selector Buttons
+&lt;iframe src="p4.html" width="100%" height="540" id="igraph" scrolling="no" seamless="seamless" frameBorder="0"&gt; &lt;/iframe&gt;
+[https://plot.ly/r/range-slider/](https://plot.ly/r/range-slider/)
+
+
+---
+# Mulitple Slider Controls
+&lt;iframe src="p5.html" width="100%" height="540" id="igraph" scrolling="no" seamless="seamless" frameBorder="0"&gt; &lt;/iframe&gt;
+[https://plot.ly/r/range-slider/](https://plot.ly/r/range-slider/)
+
+
+---
+class: small, left, top
+## Why Interactive Visualization?
+
+#### Interactivity allows users to pose multiple questions:
+
+* Switch axes or to add confabulating factors
+
+* Break down responses to a specific question
+
+.footnote[Martin Hadley, 3 benefits of interactive visualization, https://campus.sagepub.com/blog/3-benefits-of-interactive-visualization]
+
+
+
+
+
+
+
+
+
+
+---
+# 3D Scatter Plots
+&lt;iframe src="p3dscat.html" width="100%" height="540" id="igraph" scrolling="no" seamless="seamless" frameBorder="0"&gt; &lt;/iframe&gt;
+
+
+
+
+---
+# Grouped Box Plots
+&lt;iframe src="p6.html" width="100%" height="540" id="igraph" scrolling="no" seamless="seamless" frameBorder="0"&gt; &lt;/iframe&gt;
+[https://plot.ly/r/box-plots/](https://plot.ly/r/box-plots/)
+
+
+---
+# Correlation Map
+&lt;iframe src="p7.html" width="100%" height="540" id="igraph" scrolling="no" seamless="seamless" frameBorder="0"&gt; &lt;/iframe&gt;
+[https://plot.ly/~smysona/8/correlation-map/#/](https://plot.ly/~smysona/8/correlation-map/#/)
+
+
+
+---
+# Shiny - [https://shiny.rstudio.com/](https://shiny.rstudio.com/)
+
+- A web application framework for **interactive** visualization
+
+- Able to generate user friendly web interfaces 
+
+- Built on a reactive programming model
+
+- Entirely extensible 
+   - custom inputs and outputs
+   - CSS themes
+   - JavaScript and D3.js
+
+- Example - [Collision Detection](https://bl.ocks.org/mbostock/raw/3231298/)
+
+---
+
+# Shiny framework 
+&lt;img src="Shinyframework.png" height="300px" width="650px"/&gt;
+
+**Template**
+
+```r
+library(shiny)
+
+ui &lt;- fluidPage()
+server &lt;- function(input, output) {}
+
+shinyApp(ui = ui, server = server)
+```
+
+
+---
+
+# Control widgets 
+&lt;img src="widgets.png" width=700 height=470&gt;
+.left[[RStudio](https://shiny.rstudio.com/tutorial/written-tutorial/lesson3/)]
+
+
+
+---
+class: inverse, left, middle
+
+# ShinyAIM - Shiny‐based application of interactive Manhattan plots
+
+Can be used for 
+
+- can explore GWAS peaks _interactively_
+
+- _interactive_ exploration of Manhattan plots for longitudinal genome‐wide association studies (GWAS)
+
+- no knowlege of R, HTML, JavaScript, or CSS is required. R code encapsulated as a web-based Shiny application
+
+
+Available at [https://chikudaisei.shinyapps.io/shinyaim/](https://chikudaisei.shinyapps.io/shinyaim/) and [https://github.com/whussain2/ShinyAIM](https://github.com/whussain2/ShinyAIM)
+
+
+
+
+
+---
+# ShinyAIM Paper
+&lt;img src="shinyAIM.png" height="350px" width="650px"/&gt;
+
+[https://doi.org/10.1002/pld3.91](https://doi.org/10.1002/pld3.91)
+
+
+
+---
+# Summary
+
+- data visualization plays a crucial role in summarizing and identifying the characteristics of data
+
+- however, big data prevent the plotting of the entire picture 
+
+- interactive visualization, with capabilities to zoom in and out, can help investigate both global and local structures of graphs
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();</script>
+
+<script>
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

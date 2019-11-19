@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+  <head>
+    <title>Genetic analysis of time series phenomics</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Gota Morota  http://morotalab.org/" />
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
+    <link href="libs/remark-css/default-fonts.css" rel="stylesheet" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Genetic analysis of time series phenomics
+## Quantitative Genetics Short Course <span class="citation">@UFV</span>
+### Gota Morota <br /><a href="http://morotalab.org/" class="uri">http://morotalab.org/</a> <br />
+### 2019/11/19
+
+---
+
+
+
+
+---
+# High-throughput phenomics
+.pull-left[
+&lt;div align="left"&gt;
+&lt;iframe src="https://innovate.unl.edu/video/leasing-options/greenhouse-innovation-center.mp4" width="250" height="150" frameBorder="0" class="giphy-embed" allowFullScreen&gt;&lt;/iframe&gt;&lt;p&gt;&lt;a href="https://innovate.unl.edu/greenhouse-innovation-center"&gt;UNL Greenhouse Innovation Center&lt;/a&gt;
+&lt;/p&gt;
+&lt;/div&gt;
+
+&lt;div align="left"&gt;
+&lt;iframe width="260" height="200" src="https://www.youtube.com/embed/wor4BFjbIyI?rel=0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen&gt;&lt;/iframe&gt;
+&lt;p&gt;&lt;a href="https://www.youtube.com/watch?v=wor4BFjbIyI"&gt;Spidercam&lt;/a&gt;
+&lt;/div&gt;
+
+]
+
+.pull-right[
+&lt;div align="right"&gt;
+&lt;img src="https://www.frontiersin.org/files/Articles/254051/fpls-08-00421-HTML/image_m/fpls-08-00421-g002.jpg" width=400 height=400&gt;&lt;p&gt;Unmanned aerial vehicle&lt;a href="https://www.frontiersin.org/articles/10.3389/fpls.2017.00421/full"&gt; (Watanabe et al. 2017)&lt;/a&gt;
+&lt;/div&gt;
+]
+
+
+---
+# Pixelomics
+![](pix.png)
+Converting image data into numerical values (e.g., 12.5, 45.8, 25.9, etc.)
+
+
+---
+# Automated image-based phenomics facility
+![](auspheno.png)
+
+
+
+---
+# Automated high-throughput phenotyping
+&lt;iframe width="700" height="500" src="https://www.youtube.com/embed/JWNoQ3w-KbY" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen&gt;&lt;/iframe&gt;
+
+---
+# Longitudinal data
+Projected shoot area (PSA) = the sum of plant pixel from two side-view images and one top-view 
+&lt;div align="center"&gt;
+&lt;img src="mackPSA.png" width=400 height=200&gt;&lt;p&gt;&lt;a href=""&gt; Campbell et al. (2018)&lt;/a&gt;
+&lt;/div&gt;
+- Single time point analysis
+   - cross-sectional analysis
+- Longitudinal analysis 
+   - leverage covariance among time points
+   - account for longitudinal curve
+   
+
+---
+class: inverse, center, middle
+
+# Genomic BLUP
+
+
+
+---
+# Expectation and variance 
+Define the random variable `\(W\)` which counts the number of reference allele `\(A\)`.
+`\begin{align*}
+  W &amp;=
+  \begin{cases}
+    2 &amp; \text{if } AA  \text{ with frequency } p^2 \\
+    1 &amp; \text{if } Aa \text{ with frequency } 2p(1-p) \\
+    0 &amp; \text{if } aa \text{ with frequency } (1-p)^2
+  \end{cases} \\
+\end{align*}`
+where `\(p\)` is the allele frequency of `\(A\)`. 
+
+--
+
+Then, 
+`\begin{align*}
+E[W] &amp;= 0 \times (1 - p_j)^2 + 1 \times [2p(1-p)] + 2 \times p^2 \\
+&amp;= 2p \\
+E[W^2] &amp;= 0^2 \times (1 - p_j)^2 + 1^2 \times [2p(1-p)] + 2^2 \times p^2 \\
+&amp;= 2p(1-p) + 4p^2 \\
+\end{align*}`
+Thus, the variance of allelic counts is 
+`\begin{align*}
+Var(W) &amp;= E[W^2] - E[W]^2 \\
+&amp;= 2p(1-p) + 4p^2  - 4p^2\\
+&amp;= 2p(1-p)
+\end{align*}`
+
+
+
+---
+# Alternative coding 
+Define the random variable `\(W\)` which counts the number of reference allele `\(A\)`.
+`\begin{align*}
+  W &amp;=
+  \begin{cases}
+    1 &amp; \text{if } AA  \text{ with frequency } p^2 \\
+    0 &amp; \text{if } Aa \text{ with frequency } 2p(1-p) \\
+    -1 &amp; \text{if } aa \text{ with frequency } (1-p)^2
+  \end{cases} \\
+\end{align*}`
+where `\(p\)` is the allele frequency of `\(A\)`. 
+
+--
+
+Then, 
+`\begin{align*}
+E[W] &amp;= -1 \times (1 - p_j)^2 + 0 \times [2p(1-p)] + 1 \times p^2 \\
+&amp;= −(1 − 2p + p^2) + p^2 = 2p-1 \\
+E[W^2] &amp;= (-1)^2 \times (1 - p_j)^2 + 0^2 \times [2p(1-p)] + 1^2 \times p^2 \\
+&amp;= 1 − 2p + p^2 +p^2  = 2p^2 − 2p + 1 \\
+\end{align*}`
+Thus, the variance of allelic counts is 
+`\begin{align*}
+Var(W) &amp;= E[W^2] - E[W]^2 \\
+&amp;= 2p^2 − 2p + 1 − (4p^2 − 4p + 1)\\
+&amp;= -2p^2 + 2p = 2p(1-p)
+\end{align*}`
+
+
+
+
+---
+# Centered marker codes  
+
+`\begin{align*}
+  W - E(W) &amp;=
+  \begin{cases}
+    2 -2p &amp; \text{if } AA  \text{ with frequency } p^2 \\
+    1 - 2p &amp; \text{if } Aa \text{ with frequency } 2p(1-p) \\
+    0 - 2p &amp; \text{if } aa \text{ with frequency } (1-p)^2
+  \end{cases} \\
+\end{align*}`
+
+
+`\begin{align*}
+  W - E(W) &amp;=
+  \begin{cases}
+    1 - (2p-1) = 2 -2p&amp; \text{if } AA  \text{ with frequency } p^2 \\
+    0 - (2p-1)  = 1 - 2p &amp; \text{if } Aa \text{ with frequency } 2p(1-p) \\
+    -1 - (2p-1) = 0 - 2p &amp; \text{if } aa \text{ with frequency } (1-p)^2
+  \end{cases} \\
+\end{align*}`
+where `\(p\)` is the allele frequency of `\(A\)`. 
+
+Therefore, the variance and the centered codes are the same. 
+
+
+
+
+
+
+
+
+---
+# Genomic relationship matrix (1)
+Recall that
+`\begin{align*}
+\mathbf{y} &amp;= \mathbf{g} + \boldsymbol{\epsilon} = \mathbf{W}_c\mathbf{a} + \boldsymbol{\epsilon}
+\end{align*}`
+
+Assume genetic value is parameterized as `\(g_{i} = \sum w_{ij} a_j\)`
+where both `\(w\)` and `\(a\)` are treated as random and independent. 
+Assuming linkage equilibrium of markers (all loci are mutually independent) 
+`\begin{align*}
+\sigma^2_g &amp;= \sum_j 2 p_j(1-p_j) \cdot \sigma^2_{a_j}. \notag \\
+\end{align*}`
+Under the homogeneous marker variance assumption
+`\begin{align}
+\sigma^2_{a} &amp;= \frac{\sigma^2_g}{2 \sum_j p_j(1-p_j) }.
+\end{align}`
+Then, variance of genetic values is 
+`\begin{align*}
+Var(\mathbf{g}) &amp;= Var(\mathbf{W}_c\mathbf{a}) = \mathbf{W_cW'_c}\sigma^2_{a} \\
+&amp;= \frac{\mathbf{W_cW'_c}}{2 \sum_j p_j(1-p_j)} \sigma^2_g = \mathbf{G}\sigma^2_g
+\end{align*}`
+
+
+
+
+---
+# Genomic relationship matrix (2)
+Similarly, 
+`\begin{align*}
+\sigma^2_g &amp;=   \sum^m_{j=1} 2p_{j}(1 - p_j)\sigma^2_{a}  \\
+&amp;= m \sigma^2_{a}
+\end{align*}`
+
+- homogeneous marker variance assumption
+
+- if assumed that all markers have variance 1 (following standardizing marker genotypes) 
+
+- the marked genetic variance is given by the sum of individual marker variances 
+
+`\begin{align*}
+\sigma^2_{a} = \sigma^2_g / m
+\end{align*}`
+
+
+Then, variance of genetic values is 
+`\begin{align*}
+Var(\mathbf{g}) &amp;= Var(\mathbf{W}_{cs}\mathbf{a}) = \mathbf{W_{cs}W'_{cs}}\sigma^2_{a} \\
+&amp;= \frac{\mathbf{W_{cs}W'_{cs}}}{m} \sigma^2_g = \mathbf{G}\sigma^2_g
+\end{align*}`
+
+
+---
+# Genomic best linear unbiased prediction
+Suppose underlying signal is given by  
+$$
+\mathbf{y} = \mathbf{g} + \boldsymbol{\epsilon}
+$$
+
+where `\(\mathbf{g} \sim N(0, \mathbf{G}\sigma^2_g)\)`. 
+
+We approximate the vector of genetic values `\(\mathbf{g}\)` with a linear function  
+
+$$
+\mathbf{y} = \mathbf{W}\mathbf{a} + \boldsymbol{\epsilon}
+$$
+
+- `\(\mathbf{W}\)` is the centered `\(n\)` `\(\times\)` `\(m\)` matrix of additive marker genotypes 
+
+- `\(\mathbf{a}\)` is the vector of regression coefficients on marker genotypes 
+
+- `\(\boldsymbol{\epsilon}\)` is the residual 
+
+
+---
+# Genomic best linear unbiased prediction
+Variance-covariance matrix of `\(\mathbf{y}\)` is
+`\begin{align*}
+\mathbf{V}_y &amp;= \mathbf{V}_g + \mathbf{V}_{\epsilon} \\
+&amp;= \mathbf{WW'}\sigma^2_{a} + \mathbf{I} \sigma^2_{\epsilon}
+\end{align*}`
+
+- `\(\mathbf{a} \sim N(0, \mathbf{I}\sigma^2_{\mathbf{a}})\)`  
+
+- `\(\boldsymbol{\epsilon} \sim N(0, \mathbf{I}\sigma^2_{\boldsymbol{\epsilon}})\)`
+
+- `\(\mathbf{V}_g = \mathbf{WW'}\sigma^2_{a}\)` is the covariance matrix due to markers
+
+
+
+---
+# Genomic best linear unbiased prediction
+If normality is assumed, the best linear unbiased prediction (BLUP) of `\(\mathbf{g}\)` `\((\hat{\mathbf{g}})\)` is the conditional mean of `\(\mathbf{g}\)` given the data  
+`\begin{align}
+BLUP(\hat{\mathbf{g}}) &amp;= E(\mathbf{g}|\mathbf{y}) = E[\mathbf{g}] + Cov(\mathbf{g}, \mathbf{y}^T) Var(\mathbf{y})^{-1}  [\mathbf{y} - E(\mathbf{y})] \notag \\
+&amp;=  Cov(\mathbf{W}\mathbf{a}, \mathbf{y}^T)\cdot \mathbf{V}_y^{-1}  \mathbf{y}  \notag \\
+&amp;= \mathbf{WW'}\sigma^2_{\mathbf{a}} [\mathbf{WW'}\sigma^2_{a} + \mathbf{I} \sigma^2_{\epsilon}]^{-1}  \mathbf{y}  \notag \\
+&amp;= [\mathbf{I} +    \frac{\sigma^2_{\epsilon}}{\mathbf{WW'}\sigma^2_{a}} ]^{-1}  \mathbf{y}  \\
+&amp;= [\mathbf{I} +  (\mathbf{WW'})^{-1}  \frac{\sigma^2_{\epsilon}}{\sigma^2_{a}} ]^{-1}  \mathbf{y}, 
+\end{align}`
+assuming that `\(\mathbf{WW'}\)` is invertible
+
+- `\(Cov(\mathbf{W}) = \mathbf{WW'}\)`  is a covariance matrix of marker genotypes (provided that `\(X\)` is centered), often considered to be the simplest form of additive genomic relationship kernel, `\(\mathbf{G}\)`. 
+
+
+---
+# Genomic best linear unbiased prediction
+We can refine this kernel `\(Cov(\mathbf{W}) = \mathbf{WW'}\)` by relating genetic variance `\(\sigma^2_g\)` and marker genetic variance `\(\sigma^2_{a}\)` under the following assumptions
+
+Assume genetic value is parameterized as 
+`\(g_{i} = \sum w_{ij} a_j\)` 
+where both `\(x\)` and `\(a\)` are treated as random and independent. 
+
+Assuming linkage  equilibrium of markers (all loci are mutually independent) 
+`\begin{align*}
+\sigma^2_g &amp;= \sum_j 2 p_j(1-p_j) \cdot \sigma^2_{a_j}. \notag \\
+\end{align*}`
+Under the homogeneous marker variance assumption
+`\begin{align}
+\sigma^2_{a} &amp;= \frac{\sigma^2_g}{2 \sum_j p_j(1-p_j) }.
+\end{align}`
+
+
+
+---
+# Genomic best linear unbiased prediction
+Recall that 
+`\begin{align}
+BLUP(\hat{\mathbf{g}}) &amp;= [\mathbf{I} +  (\mathbf{WW'})^{-1}  \frac{\sigma^2_{\epsilon}}{\sigma^2_{a}} ]^{-1}  \mathbf{y}, 
+\end{align}`
+
+Replacing `\(\sigma^2_{a}\)` we get 
+`\begin{align}
+BLUP(\hat{\mathbf{g}}) &amp;= \left [\mathbf{I} +    (\mathbf{WW'})^{-1} \frac{\sigma^2_{\epsilon}}{ \frac{ \sigma^2_{g}}{2 \sum_j p_j(1-p_j)}} \right ]^{-1}  \mathbf{y}  \notag \\ 
+&amp;= \left [\mathbf{I} +    \mathbf{G}^{-1} \frac{\sigma^2_{\epsilon}}{ \sigma^2_g} \right ]^{-1}  \mathbf{y}  
+\end{align}`
+where `\(\mathbf{G} = \frac{\mathbf{WW'}}{2 \sum_j p_j(1-p_j)}\)` is known as the first `\(\mathbf{G}\)` matrix  introduced in VanRaden (2008)
+
+
+
+---
+class: inverse, center, middle
+
+# Ridge regression BLUP
+
+
+---
+## BLUP of marker effects 
+Suppose that the phenotype-genotype mapping function is 
+`\begin{align*}
+\mathbf{y} &amp;= \mathbf{g} + \boldsymbol{\epsilon} \\
+\mathbf{y} &amp;= \mathbf{W}\mathbf{a} + \boldsymbol{\epsilon} \\
+\mathbf{a} &amp;\sim N(0, \mathbf{I}\sigma^2_{a})  
+\end{align*}`
+The conditional expectation of `\(\mathbf{a}\)` given `\(\mathbf{y}\)` is 
+`\begin{align*}
+BLUP(\mathbf{a}) &amp;= E(\mathbf{a}| \mathbf{y})= Cov(\mathbf{a}, \mathbf{y})Var(\mathbf{y})^{-1} [\mathbf{y} - E(\mathbf{y})] \\
+&amp;= Cov(\mathbf{a}, \mathbf{W}\mathbf{a}) [\mathbf{W}\mathbf{W'} \sigma^2_{\mathbf{a}}+ \mathbf{I}\sigma^2_{\boldsymbol{\epsilon}}]^{-1} \mathbf{y} \\
+&amp;= \sigma^2_{\mathbf{a}} \mathbf{W}' [\mathbf{W}\mathbf{W'} \sigma^2_{\mathbf{a}} + \mathbf{I}\sigma^2_{\boldsymbol{\epsilon}}]^{-1} \mathbf{y} \\
+&amp;= \sigma^2_{\mathbf{a}} \mathbf{W'}  (\mathbf{W}\mathbf{W'})^{-1} [ \sigma^2_{\mathbf{a}}\mathbf{I} + (\mathbf{W}\mathbf{W'})^{-1} \sigma^2_{\boldsymbol{\epsilon}}]^{-1}  \mathbf{y} \\
+&amp;=  \mathbf{W}^T  (\mathbf{W}\mathbf{W'})^{-1} [ \mathbf{I} + (\mathbf{W}\mathbf{W'})^{-1}  \frac{\sigma^2_{\boldsymbol{\epsilon}}}{\sigma^2_{\mathbf{a}}} ]^{-1}  \mathbf{y}.
+\end{align*}`
+
+Alternatively,
+`\begin{align*}
+BLUP(\mathbf{a}) &amp;=  \mathbf{W}^T [ (\mathbf{W}\mathbf{W'}) +  \frac{\sigma^2_{\boldsymbol{\epsilon}}}{\sigma^2_{\mathbf{a}}}\mathbf{I} ]^{-1}  \mathbf{y}. 
+\end{align*}`
+
+
+
+---
+# BLUP of marker effects 
+Thus, 
+`\begin{align*}
+BLUP(\mathbf{a}) &amp;= \mathbf{W}^T  (\mathbf{W}\mathbf{W'})^{-1} [ \mathbf{I} + (\mathbf{W}\mathbf{W'})^{-1}  \frac{\sigma^2_{\boldsymbol{\epsilon}}}{\sigma^2_{\mathbf{a}}} ]^{-1}  \mathbf{y} \\
+&amp;=  \mathbf{W'}  (\mathbf{W}\mathbf{W'})^{-1} BLUP(\mathbf{g}).
+\end{align*}`
+Thus, once we obtain `\(\hat{\mathbf{g}}\)` from GBLUP, BLUP of marker coefficients is given by 
+`\(\hat{\mathbf{a}} = \mathbf{W'} (\mathbf{W}\mathbf{W'})^{-1} \hat{\mathbf{g}}\)`
+
+We arrive at the  same prediction regardless of whether we start from the genotype matrix `\(\mathbf{W}\)` or from `\(\mathbf{g}\)` 
+
+
+---
+# How to evaluate prediction performance
+Cross-validation
+
+- take model uncertainty into account
+
+- divide data into training and testing sets
+
+- train the model in the training set
+
+- evaluate predictive performance in the testing set
+
+- predictive correlation: `\(r = cor(\mathbf{y}, \hat{\mathbf{y}})\)`
+
+- predictive correlation squared: `\(R^2 = cor(\mathbf{y}, \hat{\mathbf{y}})^2\)`
+
+- mean-squared error: `\(\sum(y - \hat{y})^2/n_{test}\)`
+
+
+
+---
+# Cross-validation
+&lt;div align="center"&gt;
+&lt;img src="Fig1CV.png" width=650 height=450&gt;
+&lt;/div&gt;
+.right[[doi:10.1093/jas/sky014](http://dx.doi.org/10.1093/jas/sky014)]
+
+
+
+---
+# K-fold cross-validation
+&lt;div align="center"&gt;
+&lt;img src="Fig1-18Bishop.png" width=650 height=450&gt;
+&lt;/div&gt;
+.right[[PRML](https://www.microsoft.com/en-us/research/people/cmbishop/)]
+
+---
+# Repeated subsampling cross-validation
+&lt;div align="center"&gt;
+&lt;img src="resamplingCV.png" width=600 height=400&gt;
+&lt;/div&gt;
+
+* Repeat this process many times (e.g., 100~200)
+* Compute how frequent (%) model A performed better than model B
+* Useful when the number of samples is small
+
+
+---
+# Cross-validation for RRBLUP 
+Training and testing sets partitioning 
+`\begin{align*}
+\text{Training} &amp;\in (\mathbf{y}_{trn},\mathbf{W}_{trn} )  \\
+\text{Testing} &amp;\in (\mathbf{y}_{tst},\mathbf{W}_{tst} )  \\
+\mathbf{y}_{trn} &amp;= \mathbf{W}_{trn} \hat{\mathbf{a}}_{trn} + \mathbf{e}_{trn} \\
+\end{align*}`
+
+How to do a cross-validation?
+
+--
+
+`\begin{align*}
+\hat{\mathbf{g}}_{tst} &amp;= \mathbf{W}_{tst} \hat{\mathbf{a}}_{trn} 
+\end{align*}`
+
+--
+
+Then evaluate 
+`\begin{align*}
+Cor(\mathbf{y}_{tst}, \hat{\mathbf{g}}_{tst}) = 
+Cor(\mathbf{y}_{tst}, \mathbf{W}_{tst} \hat{\mathbf{a}}_{trn} )
+\end{align*}`
+
+
+
+---
+# Cross-validation for GBLUP
+Training and testing sets partitioning 
+`\begin{align*}
+\mathbf{y}_{trn} &amp;= \mathbf{g}_{trn} + \mathbf{e}_{trn} \\
+\mathbf{g}_{trn} &amp;\sim N(0, \mathbf{G}_{trn, trn}) \\
+\mathbf{y}_{tst} &amp;= \mathbf{g}_{tst} + \mathbf{e}_{trn} \\
+\mathbf{g}_{tst} &amp;\sim N(0, \mathbf{G}_{tst, tst}) \\
+\end{align*}`
+How to do a cross-validation?
+
+--
+
+Compute BLUP of `\(\mathbf{g}_{tst}\)` given `\(\hat{\mathbf{g}}_{trn}\)`
+`\begin{align*}
+BLUP(\mathbf{g}_{tst}) &amp;= E(\mathbf{g}_{tst}|\hat{\mathbf{g}}_{trn}) \\
+&amp;= Cov(\mathbf{g}_{tst}, \hat{\mathbf{g}}_{trn}) Var(\hat{\mathbf{g}}_{trn})^{-1} [\hat{\mathbf{g}}_{trn} - E(\hat{\mathbf{g}}_{trn})] \\
+&amp;= \mathbf{G}_{tst, trn}\sigma^2_{g} \mathbf{G}_{trn, trn}^{-1} \sigma^{-2}_g \hat{\mathbf{g}}_{trn}  \\
+&amp;= \mathbf{G}_{tst, trn} \mathbf{G}_{trn, trn}^{-1} \hat{\mathbf{g}}_{trn}  \\
+\end{align*}`
+
+
+--
+
+Then evaluate 
+`\begin{align*}
+Cor(\mathbf{y}_{tst}, \hat{\mathbf{g}}_{tst}) = 
+Cor(\mathbf{y}_{tst}, \mathbf{G}_{tst, trn} \mathbf{G}_{trn, trn}^{-1} \hat{\mathbf{g}}_{trn})
+\end{align*}`
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---
+# Random regression model (RRM, longitudinal GBLUP)
+Predict random regression coefficients for each line using GBLUP
+`\begin{align*}
+  \text{PSA}_{tjk} =\mu + \sum_{k=0}^{K_1}\phi(t)_{jk}\beta_k + \sum_{k=0}^{K_2}\phi(t)_{jk} u_{jk} + \sum_{k=0}^{K_3}\phi(t)_{jk} pe_{jk} + \epsilon_{tjk}
+\end{align*}`
+
+- `\(\beta_k\)`: fixed mean trajectory 
+- `\(\phi\)`: Legendre polynomial
+- `\(u\)`: random additive genetic effect 
+- `\(pe\)`: random permanent environmental effect
+- `\(K\)`: order of fit
+- `\(\epsilon\)` residual
+
+At time `\(t\)`, the GBLUP for the `\(j\)`th individual is
+
+`\begin{align*}
+  \text{GBLUP}_{jt} = \phi_t\hat{u}_j
+\end{align*}`
+  where `\(\phi_t\)` is the row vector of the matrix of Legendre polynomials.
+
+
+---
+# Legendre polynomials 
+&lt;img src="LegExample.png" height="500px" width="550px"/&gt;
+
+
+
+
+---
+# The Phi matrix
+Suppose there are 20 time points (t `\(\in\)` 1, 2, `\(\cdots\)`, 20)
+
+$$
+\boldsymbol{\Phi} = \mathbf{M} \boldsymbol{\Lambda}
+$$
+- `\(\mathbf{M}\)` is the `\(t_{max}\)` by `\(d + 1\)` matrix containing the polynomials of the standardized time covariate `\(\mathbf{M}_{k+1} = \left ( \frac{2(t - t_{min} )}{t_{max} - t_{min}} \right )^k- 1\)` 
+
+- `\(\boldsymbol{\Lambda}\)` is the `\(d + 1 \times d + 1\)`  matrix of Legendre polynomial coefficients
+
+&lt;img src="phi2.png" height="310px" width="350px"/&gt;
+
+
+
+
+
+---
+# Matrix notation of RRM
+$$
+\mathbf{y} = \mathbf{Xb} + \mathbf{Z}_1 \mathbf{u} + \mathbf{Z}_2 \mathbf{pe} + \boldsymbol{\epsilon}
+$$
+
+- `\(\mathbf{y}\)`: a column vector of `\(n'\)` by 1, where `\(n'\)` is the number of records
+
+- `\(\mathbf{X}\)`: a matrix of `\(n'\)` by `\(K_1\)`
+
+- `\(\mathbf{Z_1}\)`: a matrix of `\(n'\)` by `\(n * K_2\)`
+
+- `\(\mathbf{Z_2}\)`: a matrix of `\(n'\)` by `\(n * K_3\)`
+
+![](varcovRRM.png)
+
+
+---
+# Longitudinal genomic prediction
+&lt;img src="mackCV.jpg" height="510px" width="450px"/&gt;
+---
+# Longitudinal genomic prediction
+&lt;img src="mackCV2.jpg" height="400px" width="650px"/&gt;
+
+
+
+
+
+---
+# Longitudinal genomic prediction
+&lt;img src="plantdirect.png" height="330px" width="650px"/&gt;
+
+
+---
+# Back-solving for SNP effects for shoot growth trajectories
+- Predict genetic values with random regression model
+- Solve for SNP effects
+
+`\begin{align*}
+  BLUP(\boldsymbol{\beta}) &amp;= \mathbf{W'}(\mathbf{WW'})^{-1}BLUP(\mathbf{g}).
+\end{align*}`
+Then standardization of SNP effect is given by ([Duarte et al. 2014](https://doi.org/10.1186/1471-2105-15-246)) 
+
+`\begin{align*}
+    \text{SNP}_{jt} &amp;= \frac{ \mathbf{\hat{\beta}} }{ \sqrt{\text{Var}(\mathbf{\hat{\beta})}} } \\
+    p\text{-value}_{SNP_{jt}} &amp;= 2(1 - \phi (|\text{SNP}_{jt}|)). 
+\end{align*}`
+
+where
+
+`\begin{align*}
+  \text{Var}(\boldsymbol{\hat{\beta}}) = \mathbf{W'G^{-1}W}\sigma^2_g - \mathbf{W'G^{-1}C^{22}G^{-1}W }\sigma^2_e.
+\end{align*}`
+  
+
+---
+# Variance of marker effect
+&lt;img src="varB1.png" height="256px" width="650px"/&gt;
+`\begin{align*}
+\textrm{Var(} \hat{\mathbf{u}} \textrm{)} &amp;= \mathbf{G} \sigma^2_g - \mathbf{C^{22}} \sigma^2_e
+\end{align*}`
+Thus,
+`\begin{align*}
+  \text{Var}(\boldsymbol{\hat{\beta}}) = \mathbf{W_{sc}'G^{-1}W_{sc}}\sigma^2_g - \mathbf{W_{sc}'G^{-1}C^{22}G^{-1}W_{sc} }\sigma^2_e.
+\end{align*}`
+
+
+---
+# Variance of marker effect
+![](varB2.png)
+- `\(\mathbf{C^{22}}\)` is `\(n * K_2 \times n * K_2\)`
+
+- `\(\boldsymbol{\Phi_{g}^*}\)` is a `\(n * t \times K_2 * n\)` block matrix where the diagonal sub-matrices consist of Legendre polynomials at each standardized time interval.
+
+- `\(\mathbf{C^{22*}}\)` is `\(n * t \times n * t\)`
+
+---
+# Manhattan plots (700K SNPs)
+&lt;img src="Fig2_alt.png" height="356px" width="650px"/&gt;
+
+Top: random regression model. Bottom: single time point model
+
+---
+# Persistent and time specific QTL signals
+![](Fig3.png)
+---
+# Longitudinal GWAS
+![](tpg.png)
+[https://doi.org/10.3835/plantgenome2018.10.0075](https://doi.org/10.3835/plantgenome2018.10.0075)
+
+
+
+---
+# Projected shoot area
+![](BOXPLOT.png)
+
+---
+# Legendre polynomials vs. B-splines
+![](LEG_BSP.png)
+
+
+---
+# B-splines
+Given a preconsidered knot sequence of time `\(t\)`, the covariables for B-splines of degree `\(d = 0\)` were defined by assuming values of unity for all points in a given interval or zero otherwise. For the `\(i\)`th interval given by knots
+
+&lt;img src="BsplineMath.png" height="300px" width="500px"/&gt;
+
+The number of regression coefficients is given by the number of knots + degree − 1.
+
+---
+# Longitudinal CV scenarios
+&lt;img src="CV_Scenario.png" height="450px" width="650px"/&gt;
+
+
+---
+# Longitudinal CV scenarios
+* CV1: The time-specific genetic value of the `\(i\)`th individual in the training set was computed as `\(\hat{\mathbf{g}}_\text{trn, i}^{t} = \boldsymbol{\Phi}_t \mathbf{u}_{i}\)`, where `\(\hat{\mathbf{g}}_\text{trn, i}^{t}\)` is the estimated genetic value of the individual `\(i\)` at time `\(t\)`; `\(\boldsymbol{\Phi}_t\)` is the `\(t\)`th row vector of the `\(t_\text{max} \times K_1\)` matrix `\(\boldsymbol{\Phi}\)`; and `\(\mathbf{u}_i\)` is the `\(i\)`th column vector of the `\(K_1 \times n\)` matrix `\(\mathbf{u}\)`. Then, a vector of predicted genetic values of individuals in the testing set at time `\(t\)` was obtained as `\(\hat{\mathbf{g}}_\text{tst}^{t} = \mathbf{G}_{\text{tst, trn}} \mathbf{G}_{\text{trn, trn}}^{-1} \hat{\mathbf{g}}_\text{trn}^{t}\)`, where `\(\mathbf{G}_{\text{tst, trn}}\)` is the genomic relationship matrix between the testing and training set and `\(\mathbf{G}_{\text{trn, trn}}^{-1}\)` is the inverse of genomic relationship matrix between the training set.
+
+* CV2 and CV3: First estimate the random regression coefficient matrix `\(\mathbf{u}\)` using `\(\boldsymbol{\Phi}_{1:t}\)`, which was computed from time point 1 to time point `\(t\)`. The prediction of future time points `\(t'\)` ( `\(t+1 \leq t' \leq  t_\text{max}\)` ) for an individual `\(i\)` was carried out by  `\(\hat{\mathbf{g}}^{t'} = \boldsymbol{\Phi}_{t'} \mathbf{u}_{i}\)`, where `\(\boldsymbol{\Phi}_{t'}\)` is the `\(t^{'}\)`th row vector of `\(t_\text{max} - t\)` by  `\(K + 1\)` matrix `\(\boldsymbol{\Phi}\)`; and `\(\mathbf{u}_i\)` is the `\(i\)`th column vector of the number of random regression coefficients by `\(n\)` matrix `\(\mathbf{u}\)`. 
+
+
+
+---
+# CV1 - RRM vs. MTM
+![](CV1_Plot.png)
+
+
+
+---
+# CV2 control conditions
+![](CON_CV2.png)
+
+
+
+
+---
+# CV2 stress conditions
+![](LW_CV2.png)
+
+
+
+---
+# CV3 control conditions
+![](CON_CV3.png)
+
+---
+# CV3 stress conditions
+![](WL_CV3.png)
+
+
+
+---
+# Goodness-of-fit vs. Prediction
+![](GoF.png)
+
+
+---
+# bioRxiv preprint
+![](MomenRRM3.png)
+[doi: https://doi.org/10.1101/632117](https://doi.org/10.1101/632117)
+
+
+---
+# Additional topics 
+![](arxiv.png)
+[https://arxiv.org/abs/1904.12341](https://arxiv.org/abs/1904.12341)
+
+
+---
+# Software
+
+- [ASReml](https://www.vsni.co.uk/software/asreml/)
+
+- [Wombat](http://didgeridoo.une.edu.au/km/wombat.php)
+
+- [BLUPF90](http://nce.ads.uga.edu/wiki/doku.php)
+
+
+
+
+
+
+---
+# Summary
+
+- Random regression models provide a flexible framework for longitudinal genomic prediction and longitudinal GWAS
+
+- Greater prediction accuracy with random regression
+
+- Identifies time-specific genetic signals
+
+- Deep learning?
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();</script>
+
+<script>
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
