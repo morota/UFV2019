@@ -1,0 +1,229 @@
+---
+title: "Genomic best linear unbiased prediction"
+subtitle: "Quantitative Genetics Short Course @UFV"
+author: "Gota Morota"
+date: "2019/11/19"
+output:
+  rmdformats::readthedown:
+    highlight: kate
+    self_contained: false
+    code_folding: hide
+---
+
+```{r knitr_init, echo=FALSE, cache=FALSE}
+library(knitr)
+library(rmdformats)
+
+## Global options
+options(max.print="75")
+opts_chunk$set(echo=TRUE,
+	             cache=TRUE,
+               prompt=FALSE,
+               tidy=TRUE,
+               comment=NA,
+               message=FALSE,
+               warning=FALSE)
+opts_knit$set(width=75)
+```
+
+
+## Data
+Resende Jr. et al. (2012) ([DOI: 10.1534/genetics.111.137026](http://dx.doi.org/10.1534/genetics.111.137026)) analyzed 17 traits in loblolly pine (Pinus taeda) data, which include 951 individuals genotyped with 4853 SNPs. In this homework assignment, we will use the derregressed breeding values of crown width across the planting beds at age 6 (CWAC6). Download the [zip](http://www.genetics.org/highwire/filestream/412827/field_highwire_adjunct_files/7/Loblolly_Pine_Resende_.zip) file and type the following code. 
+```{r, eval=FALSE}
+# read phenotype and SNP files
+CWAC6 <- read.csv("Loblolly_Pine_Resende/Phenotypic_Data Folder/DATA_nassau_age6_CWAC.csv", header=TRUE, stringsAsFactors = FALSE)
+SNP <- read.csv("Loblolly_Pine_Resende/Snp_Data.csv", header=TRUE, stringsAsFactors = FALSE)
+
+# remove missing phenotypes 
+na.index <-  which(is.na(CWAC6$Derregressed_BV))
+CWAC6 <- CWAC6[-na.index, ]
+SNP <- SNP[-na.index, ]
+table(CWAC6$Genotype == SNP[,1])
+
+# phenotypes 
+y <- CWAC6$Derregressed_BV
+y <- matrix(y, ncol=1)
+
+# markers 
+SNP <- SNP[,-1] # 861 x 4853
+SNP[SNP == -9] <- NA
+```
+
+
+## Question 1
+Replace missing marker genotypes with mean values. Then store the marker genotypes in a matrix object `W`. 
+```{r, eval=FALSE, echo=TRUE}
+W <- matrix(0, ncol=ncol(SNP), nrow=nrow(SNP))
+for (j in 1:ncol(SNP)){
+  #cat("j = ", j, '\n')
+  W[,j] <- ifelse(is.na(SNP[,j]), mean(SNP[,j], na.rm=TRUE), SNP[,j])
+}
+```
+
+## Question 2
+Perform a quality control by removing markers with MAF < 0.05. How many markers are removed? Save the filtered genotype matrix in `W2`. 
+```{r, eval=FALSE, echo=TRUE}
+freq <- colMeans(W) / 2 
+maf <- ifelse(freq > 0.5, 1-freq, freq)
+maf.index <- which(maf < 0.05)
+length(maf.index)
+W2 <- W[, -maf.index]
+```
+
+## Question 3
+Standardize the genotype matrix to have a mean of zero and variance of one. Save this matrix as `Ws`. 
+```{r, eval=FALSE, echo=TRUE}
+Ws <- scale(W2, center = TRUE, scale = TRUE)
+
+# dimensions 
+n <- nrow(Ws)
+m <- ncol(Ws)
+```
+
+## Question 4
+Compute the second genomic relationship matrix of VanRaden (2008) `G` using the entire markers. Then add a very small positive constant (e.g., 0.001) to the diagonal elements so that `G` matrix is invertible. 
+```{r, eval=FALSE, echo=TRUE}
+G <- tcrossprod(Ws) / ncol(Ws)
+G <- G + diag(n)*0.001
+```
+
+## Question 5
+Set up mixed model equations (MME) by fitting the model $\mathbf{y = 1B + Zu + e}$, where $\mathbf{B}$ is the intercept, $\mathbf{Z}$ is the incident matrix of individuals, $\mathbf{u}$ is the additive genetic values, and $\mathbf{e}$ is the residual. Directly take the inverse of LHS to obtain the solutions for GBLUP. Report the estimates of intercept and additive genetic values. Use $\lambda = 1.348411$. 
+```{r, eval=FALSE, echo=TRUE}
+lambda <- 1.348411 # fit$Ve / fit$Vu
+Ginv <- solve(G)
+ones <- matrix(1, ncol=1, nrow=n)
+Z <- diag(n)
+LHS1 <- cbind(crossprod(ones), crossprod(ones, Z)) 
+LHS2 <- cbind(crossprod(Z, ones), crossprod(Z) +  Ginv*lambda)
+LHS <- rbind(LHS1, LHS2)
+RHS <- rbind( crossprod(ones, y), crossprod(Z,y) )
+sol <- solve(LHS, RHS)
+head(sol)
+tail(sol)
+```
+
+## Question 6
+Repeat Question 5 and fit GBLUP by using the `mixed.solve` function in the [rrBLUP](https://cran.r-project.org/web/packages/rrBLUP/index.html) R package. Report the estimates of intercept and additive genetic values. Do they agree with the estimates in Question 5? Also, report the estimated genomic heritability and the ratio of variance components $\lambda = \frac{\sigma^2_e}{\sigma^2_A}$. 
+```{r, eval=FALSE, echo=TRUE}
+library(rrBLUP)
+fit <- mixed.solve(y = y, K=G)
+# additive genetic variance
+fit$Vu
+# residual variance
+fit$Ve
+# intercept 
+fit$beta
+# additive genetic values
+head(fit$u)
+tail(fit$u)
+# genomic h2
+fit$Vu / (fit$Vu + fit$Ve)
+# ratio of variance components 
+fit$Ve / fit$Vu
+```
+
+## Question 7
+Set up mixed model equations (MME) by fitting the model $\mathbf{y = 1B + Wa + e}$, where $\mathbf{B}$ is the intercept, $\mathbf{W}$ is the standardized marker genotypes (`Ws`), $\mathbf{a}$ is the additive marker genetic effects, and $\mathbf{e}$ is the residual. Directly take the inverse of LHS to obtain the solutions for marker-based GBLUP (RR-BLUP). Report the estimates of intercept and marker additive genetic effects. Use $\lambda = 4326.212$. 
+```{r, eval=FALSE, echo=TRUE}
+lambda <- 4326.212 # fit$Ve / fit$Vu
+ones <- matrix(1, ncol=1, nrow=n)
+I <- diag(m)
+LHS1 <- cbind(crossprod(ones), crossprod(ones, Ws)) 
+LHS2 <- cbind(crossprod(Ws, ones), crossprod(Ws) +  I*lambda)
+LHS <- rbind(LHS1, LHS2)
+RHS <- rbind( crossprod(ones, y), crossprod(Ws,y) )
+sol2 <- solve(LHS, RHS)
+head(sol2)
+tail(sol2)
+```
+
+## Question 8
+Repeat Question 7 and fit RR-BLUP by using the `mixed.solve` function in the [rrBLUP](https://cran.r-project.org/web/packages/rrBLUP/index.html) R package. Report the estimates of intercept and marker additive genetic effects. Do they agree with the estimates in Question 7? Also, report the ratio of variance components $\lambda = \frac{\sigma^2_e}{\sigma^2_a}$. 
+```{r, eval=FALSE, echo=TRUE}
+library(rrBLUP)
+fit2 <- mixed.solve(y = y, Z=Ws)
+# marker additive genetic variance
+fit2$Vu
+# residual variance
+fit2$Ve
+# intercept 
+fit2$beta
+# marker additive genetic effects
+head(fit2$u)
+tail(fit2$u)
+# ratio of variance components 
+fit2$Ve / fit2$Vu
+```
+
+## Question 9
+Recall that BLUP of marker effects is given by $\mathbf{W}^T  (\mathbf{W}\mathbf{W}^T)^{-1} BLUP(\mathbf{u})$. This suggests that we can go back and forth between GBLUP and RR-BLUP. Convert the esitmated additive genetic values obtained in Question 5 to marker additive genetic effects. Add a very small positive constant (e.g., 0.001) to the diagonals of $\mathbf{WsWs^T}$ if necessary. Do the converted marker additive genetic effects agree with the estimates we obtained in Question 7?
+```{r, eval=FALSE, echo=TRUE}
+sol3 <-  t(Ws) %*% solve(Ws %*% t(Ws) + diag(n)*0.001) %*% matrix(sol[-1])
+head(sol3)
+head(sol2, 7)[-1]
+tail(sol3)
+tail(sol2)
+```
+
+## Question 10
+Recall that BLUP of marker effects is given by $\mathbf{X}^T  (\mathbf{X}\mathbf{X}^T)^{-1} BLUP(\mathbf{u})$. This suggests that we can go back and forth between GBLUP and RR-BLUP. Convert the esitmated additive genetic values obtained in Question 6 to marker additive genetic effects. Add a very small positive constant (e.g., 0.001) to the diagonals of $\mathbf{XsXs^T}$ if necessary. Do the converted marker additive genetic effects agree with the estimates we obtained in Question 8?
+```{r, eval=FALSE, echo=TRUE}
+sol4 <-  t(Ws) %*% solve(Ws %*% t(Ws) + diag(n)*0.001) %*% matrix(fit$u)
+head(sol4)
+head(fit2$u)
+tail(sol4)
+tail(fit2$u)
+```
+
+## Question 11
+Repeat 5 (GBLUP) but treat the first 600 individuals as a training set and predict the additive genetic values of the remaining individuals in the testing set. What is the predictive correlation in the testing set? Use $\lambda = 1.348411$. 
+```{r, eval=FALSE, echo=TRUE}
+n.trn <- 600
+n.tst <- 261
+y.trn <- y[1:n.trn]
+y.tst <- y[n.trn+1:n.tst]
+Ws.trn <- Ws[1:n.trn,]
+Ws.tst <- Ws[n.trn+1:n.tst,]
+
+Gtrn <- tcrossprod(Ws.trn) / ncol(Ws.trn)
+Gtrn <- Gtrn + diag(n.trn)*0.001
+Gtst.trn <- tcrossprod(Ws.tst, Ws.trn) / ncol(Ws.tst)
+#Gtrn <- G[1:n.trn, 1:n.trn]
+#Gtst.trn <- G[n.trn+1:n.tst, 1:n.trn]
+
+lambda <- 1.348411 # fit$Ve / fit$Vu
+Ginv.trn <- solve(Gtrn)
+ones <- matrix(1, ncol=1, nrow=n.trn)
+Z <- diag(n.trn)
+LHS1 <- cbind(crossprod(ones), crossprod(ones, Z)) 
+LHS2 <- cbind(crossprod(Z, ones), crossprod(Z) +  Ginv.trn*lambda)
+LHS <- rbind(LHS1, LHS2)
+RHS <- rbind( crossprod(ones, y.trn), crossprod(Z,y.trn) )
+sol.trn <- solve(LHS, RHS)
+
+# prediction
+y.hat <- Gtst.trn %*% Ginv.trn %*% matrix(sol.trn[c(2:(n.trn+1))])
+cor(y.hat, y[(n.trn+1):n])
+```
+
+
+## Question 12
+Repeat 7 (RR-BLUP) but treat the first 600 individuals as a training set and predict the additive genetic values of the remaining individuals in the testing set. What is the predictive correlation in the testing set? Use $\lambda = 4326.212$. Also, compare this predictive correlation to the one from Question 11. If computed correctly, these two values should be exactly the same or very similar. Briefly explain why this is the case.
+```{r, eval=FALSE, echo=TRUE}
+Ws.trn <- Ws[1:n.trn, ]
+Ws.tst <- Ws[n.trn+1:n.tst, ]
+lambda <- 4326.212 # fit$Ve / fit$Vu
+ones <- matrix(1, ncol=1, nrow=n.trn)
+I <- diag(m)
+LHS1 <- cbind(crossprod(ones), crossprod(ones, Ws.trn)) 
+LHS2 <- cbind(crossprod(Ws.trn, ones), crossprod(Ws.trn) +  I*lambda)
+LHS <- rbind(LHS1, LHS2)
+RHS <- rbind( crossprod(ones, y.trn), crossprod(Ws.trn, y.trn) )
+sol.trn <- solve(LHS, RHS)
+
+# prediction
+y.hat <-Ws.tst %*% matrix(sol.trn[-1])
+cor(y.hat, y[(n.trn+1):n])
+```
+

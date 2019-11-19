@@ -31,7 +31,7 @@ This is the day 1 computer lab session for quantitative genetic analysis. The go
 
 
 ## Data
-We are going to use the `australia.soybean` data included in the [agridat](https://cran.r-project.org/web/packages/agridat/index.html) package. This dataset contains multi-environment trial of soybean in Australia for 58 variesties.  
+We are going to use the `australia.soybean` data included in the [agridat](https://cran.r-project.org/web/packages/agridat/index.html) package. This dataset contains multi-environment trial of soybean in Australia for 58 varieties.  
 ```{r, eval=FALSE, echo=TRUE}
 # install.packages("agridat")
 library(agridat)

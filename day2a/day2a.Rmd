@@ -19,7 +19,7 @@ library(tidyverse)
 library(htmlwidgets)
 ```
 
----
+
 # High-throughput phenomics
 .pull-left[
 <div align="left">

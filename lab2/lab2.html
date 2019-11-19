@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+<meta name="author" content="Gota Morota" />
+
+
+<title>Genomic best linear unbiased prediction</title>
+
+<script src="lab2_files/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="lab2_files/bootstrap-3.3.6/css/bootstrap.min.css" rel="stylesheet" />
+<script src="lab2_files/bootstrap-3.3.6/js/bootstrap.min.js"></script>
+<script src="lab2_files/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<script src="lab2_files/navigation-1.1/tabsets.js"></script>
+<script src="lab2_files/navigation-1.1/codefolding.js"></script>
+<link href="lab2_files/magnific-popup-1.1.0/magnific-popup.css" rel="stylesheet" />
+<script src="lab2_files/magnific-popup-1.1.0/jquery.magnific-popup.min.js"></script>
+<link href="lab2_files/readthedown-0.1/readthedown.css" rel="stylesheet" />
+<script src="lab2_files/readthedown-0.1/readthedown.js"></script>
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; background-color: #ffffff; color: #1f1c1b; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; background-color: #ffffff; color: #a0a0a0; border-right: 1px solid #a0a0a0; }
+td.sourceCode { padding-left: 5px; }
+pre, code { color: #1f1c1b; background-color: #ffffff; }
+code > span.kw { color: #1f1c1b; font-weight: bold; } /* Keyword */
+code > span.dt { color: #0057ae; } /* DataType */
+code > span.dv { color: #b08000; } /* DecVal */
+code > span.bn { color: #b08000; } /* BaseN */
+code > span.fl { color: #b08000; } /* Float */
+code > span.cn { color: #aa5500; } /* Constant */
+code > span.ch { color: #924c9d; } /* Char */
+code > span.sc { color: #3daee9; } /* SpecialChar */
+code > span.st { color: #bf0303; } /* String */
+code > span.vs { color: #bf0303; } /* VerbatimString */
+code > span.ss { color: #ff5500; } /* SpecialString */
+code > span.im { color: #ff5500; } /* Import */
+code > span.co { color: #898887; } /* Comment */
+code > span.do { color: #607880; } /* Documentation */
+code > span.an { color: #ca60ca; } /* Annotation */
+code > span.cv { color: #0095ff; } /* CommentVar */
+code > span.ot { color: #006e28; } /* Other */
+code > span.fu { color: #644a9b; } /* Function */
+code > span.va { color: #0057ae; } /* Variable */
+code > span.cf { color: #1f1c1b; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #1f1c1b; } /* Operator */
+code > span.bu { color: #644a9b; font-weight: bold; } /* BuiltIn */
+code > span.ex { color: #0095ff; font-weight: bold; } /* Extension */
+code > span.pp { color: #006e28; } /* Preprocessor */
+code > span.at { color: #0057ae; } /* Attribute */
+code > span.re { color: #0057ae; } /* RegionMarker */
+code > span.in { color: #b08000; } /* Information */
+code > span.wa { color: #bf0303; } /* Warning */
+code > span.al { color: #bf0303; font-weight: bold; } /* Alert */
+code > span.er { color: #bf0303; text-decoration: underline; } /* Error */
+code > span. { color: #1f1c1b; } /* Normal */
+</style>
+
+
+</head>
+
+<body>
+
+
+<div id="content" data-toggle="wy-nav-shift">
+
+<!-- tabsets -->
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+</script>
+
+<!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("hide" === "show");
+});
+</script>
+
+<nav id="nav-top" role="navigation" aria-label="top navigation">
+    <a role="button" href="#" data-toggle="wy-nav-top"><span class="glyphicon glyphicon-menu-hamburger"></span></a>
+</nav>
+
+<div class="btn-group pull-right">
+<button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="text-muted">Code</span> <span class="text-muted caret"></span></button>
+<ul class="dropdown-menu" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All</a></li>
+</ul>
+</div>
+
+<div id="header">
+<h1 class="title">Genomic best linear unbiased prediction</h1>
+<h1 class="subtitle">Quantitative Genetics Short Course <span class="citation">@UFV</span></h1>
+</div>
+
+
+<div id="table-of-contents">
+    <h2><a href="#content">Genomic best linear unbiased prediction</a></h2>
+    <div id="text-table-of-contents">
+      <ul>
+      <li><a href="#data">Data</a></li>
+      <li><a href="#question-1">Question 1</a></li>
+      <li><a href="#question-2">Question 2</a></li>
+      <li><a href="#question-3">Question 3</a></li>
+      <li><a href="#question-4">Question 4</a></li>
+      <li><a href="#question-5">Question 5</a></li>
+      <li><a href="#question-6">Question 6</a></li>
+      <li><a href="#question-7">Question 7</a></li>
+      <li><a href="#question-8">Question 8</a></li>
+      <li><a href="#question-9">Question 9</a></li>
+      <li><a href="#question-10">Question 10</a></li>
+      <li><a href="#question-11">Question 11</a></li>
+      <li><a href="#question-12">Question 12</a></li>
+      </ul>
+    </div>
+</div>
+
+<div id="main">
+<div id="data" class="section level2">
+<h2>Data</h2>
+<p>Resende Jr. et al. (2012) (<a href="http://dx.doi.org/10.1534/genetics.111.137026">DOI: 10.1534/genetics.111.137026</a>) analyzed 17 traits in loblolly pine (Pinus taeda) data, which include 951 individuals genotyped with 4853 SNPs. In this homework assignment, we will use the derregressed breeding values of crown width across the planting beds at age 6 (CWAC6). Download the <a href="http://www.genetics.org/highwire/filestream/412827/field_highwire_adjunct_files/7/Loblolly_Pine_Resende_.zip">zip</a> file and type the following code.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># read phenotype and SNP files</span>
+CWAC6 &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;Loblolly_Pine_Resende/Phenotypic_Data Folder/DATA_nassau_age6_CWAC.csv&quot;</span>, <span class="dt">header=</span><span class="ot">TRUE</span>, <span class="dt">stringsAsFactors =</span> <span class="ot">FALSE</span>)
+SNP &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;Loblolly_Pine_Resende/Snp_Data.csv&quot;</span>, <span class="dt">header=</span><span class="ot">TRUE</span>, <span class="dt">stringsAsFactors =</span> <span class="ot">FALSE</span>)
+
+<span class="co"># remove missing phenotypes </span>
+na.index &lt;-<span class="st">  </span><span class="kw">which</span>(<span class="kw">is.na</span>(CWAC6<span class="op">$</span>Derregressed_BV))
+CWAC6 &lt;-<span class="st"> </span>CWAC6[<span class="op">-</span>na.index, ]
+SNP &lt;-<span class="st"> </span>SNP[<span class="op">-</span>na.index, ]
+<span class="kw">table</span>(CWAC6<span class="op">$</span>Genotype <span class="op">==</span><span class="st"> </span>SNP[,<span class="dv">1</span>])
+
+<span class="co"># phenotypes </span>
+y &lt;-<span class="st"> </span>CWAC6<span class="op">$</span>Derregressed_BV
+y &lt;-<span class="st"> </span><span class="kw">matrix</span>(y, <span class="dt">ncol=</span><span class="dv">1</span>)
+
+<span class="co"># markers </span>
+SNP &lt;-<span class="st"> </span>SNP[,<span class="op">-</span><span class="dv">1</span>] <span class="co"># 861 x 4853</span>
+SNP[SNP <span class="op">==</span><span class="st"> </span><span class="op">-</span><span class="dv">9</span>] &lt;-<span class="st"> </span><span class="ot">NA</span></code></pre></div>
+</div>
+<div id="question-1" class="section level2">
+<h2>Question 1</h2>
+<p>Replace missing marker genotypes with mean values. Then store the marker genotypes in a matrix object <code>W</code>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">W &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="dv">0</span>, <span class="dt">ncol=</span><span class="kw">ncol</span>(SNP), <span class="dt">nrow=</span><span class="kw">nrow</span>(SNP))
+<span class="cf">for</span> (j <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="kw">ncol</span>(SNP)){
+  <span class="co">#cat(&quot;j = &quot;, j, &#39;\n&#39;)</span>
+  W[,j] &lt;-<span class="st"> </span><span class="kw">ifelse</span>(<span class="kw">is.na</span>(SNP[,j]), <span class="kw">mean</span>(SNP[,j], <span class="dt">na.rm=</span><span class="ot">TRUE</span>), SNP[,j])
+}</code></pre></div>
+</div>
+<div id="question-2" class="section level2">
+<h2>Question 2</h2>
+<p>Perform a quality control by removing markers with MAF &lt; 0.05. How many markers are removed? Save the filtered genotype matrix in <code>W2</code>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">freq &lt;-<span class="st"> </span><span class="kw">colMeans</span>(W) <span class="op">/</span><span class="st"> </span><span class="dv">2</span> 
+maf &lt;-<span class="st"> </span><span class="kw">ifelse</span>(freq <span class="op">&gt;</span><span class="st"> </span><span class="fl">0.5</span>, <span class="dv">1</span><span class="op">-</span>freq, freq)
+maf.index &lt;-<span class="st"> </span><span class="kw">which</span>(maf <span class="op">&lt;</span><span class="st"> </span><span class="fl">0.05</span>)
+<span class="kw">length</span>(maf.index)
+W2 &lt;-<span class="st"> </span>W[, <span class="op">-</span>maf.index]</code></pre></div>
+</div>
+<div id="question-3" class="section level2">
+<h2>Question 3</h2>
+<p>Standardize the genotype matrix to have a mean of zero and variance of one. Save this matrix as <code>Ws</code>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">Ws &lt;-<span class="st"> </span><span class="kw">scale</span>(W2, <span class="dt">center =</span> <span class="ot">TRUE</span>, <span class="dt">scale =</span> <span class="ot">TRUE</span>)
+
+<span class="co"># dimensions </span>
+n &lt;-<span class="st"> </span><span class="kw">nrow</span>(Ws)
+m &lt;-<span class="st"> </span><span class="kw">ncol</span>(Ws)</code></pre></div>
+</div>
+<div id="question-4" class="section level2">
+<h2>Question 4</h2>
+<p>Compute the second genomic relationship matrix of VanRaden (2008) <code>G</code> using the entire markers. Then add a very small positive constant (e.g., 0.001) to the diagonal elements so that <code>G</code> matrix is invertible.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">G &lt;-<span class="st"> </span><span class="kw">tcrossprod</span>(Ws) <span class="op">/</span><span class="st"> </span><span class="kw">ncol</span>(Ws)
+G &lt;-<span class="st"> </span>G <span class="op">+</span><span class="st"> </span><span class="kw">diag</span>(n)<span class="op">*</span><span class="fl">0.001</span></code></pre></div>
+</div>
+<div id="question-5" class="section level2">
+<h2>Question 5</h2>
+<p>Set up mixed model equations (MME) by fitting the model <span class="math inline">\(\mathbf{y = 1B + Zu + e}\)</span>, where <span class="math inline">\(\mathbf{B}\)</span> is the intercept, <span class="math inline">\(\mathbf{Z}\)</span> is the incident matrix of individuals, <span class="math inline">\(\mathbf{u}\)</span> is the additive genetic values, and <span class="math inline">\(\mathbf{e}\)</span> is the residual. Directly take the inverse of LHS to obtain the solutions for GBLUP. Report the estimates of intercept and additive genetic values. Use <span class="math inline">\(\lambda = 1.348411\)</span>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">lambda &lt;-<span class="st"> </span><span class="fl">1.348411</span> <span class="co"># fit$Ve / fit$Vu</span>
+Ginv &lt;-<span class="st"> </span><span class="kw">solve</span>(G)
+ones &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="dv">1</span>, <span class="dt">ncol=</span><span class="dv">1</span>, <span class="dt">nrow=</span>n)
+Z &lt;-<span class="st"> </span><span class="kw">diag</span>(n)
+LHS1 &lt;-<span class="st"> </span><span class="kw">cbind</span>(<span class="kw">crossprod</span>(ones), <span class="kw">crossprod</span>(ones, Z)) 
+LHS2 &lt;-<span class="st"> </span><span class="kw">cbind</span>(<span class="kw">crossprod</span>(Z, ones), <span class="kw">crossprod</span>(Z) <span class="op">+</span><span class="st">  </span>Ginv<span class="op">*</span>lambda)
+LHS &lt;-<span class="st"> </span><span class="kw">rbind</span>(LHS1, LHS2)
+RHS &lt;-<span class="st"> </span><span class="kw">rbind</span>( <span class="kw">crossprod</span>(ones, y), <span class="kw">crossprod</span>(Z,y) )
+sol &lt;-<span class="st"> </span><span class="kw">solve</span>(LHS, RHS)
+<span class="kw">head</span>(sol)
+<span class="kw">tail</span>(sol)</code></pre></div>
+</div>
+<div id="question-6" class="section level2">
+<h2>Question 6</h2>
+<p>Repeat Question 5 and fit GBLUP by using the <code>mixed.solve</code> function in the <a href="https://cran.r-project.org/web/packages/rrBLUP/index.html">rrBLUP</a> R package. Report the estimates of intercept and additive genetic values. Do they agree with the estimates in Question 5? Also, report the estimated genomic heritability and the ratio of variance components <span class="math inline">\(\lambda = \frac{\sigma^2_e}{\sigma^2_A}\)</span>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(rrBLUP)
+fit &lt;-<span class="st"> </span><span class="kw">mixed.solve</span>(<span class="dt">y =</span> y, <span class="dt">K=</span>G)
+<span class="co"># additive genetic variance</span>
+fit<span class="op">$</span>Vu
+<span class="co"># residual variance</span>
+fit<span class="op">$</span>Ve
+<span class="co"># intercept </span>
+fit<span class="op">$</span>beta
+<span class="co"># additive genetic values</span>
+<span class="kw">head</span>(fit<span class="op">$</span>u)
+<span class="kw">tail</span>(fit<span class="op">$</span>u)
+<span class="co"># genomic h2</span>
+fit<span class="op">$</span>Vu <span class="op">/</span><span class="st"> </span>(fit<span class="op">$</span>Vu <span class="op">+</span><span class="st"> </span>fit<span class="op">$</span>Ve)
+<span class="co"># ratio of variance components </span>
+fit<span class="op">$</span>Ve <span class="op">/</span><span class="st"> </span>fit<span class="op">$</span>Vu</code></pre></div>
+</div>
+<div id="question-7" class="section level2">
+<h2>Question 7</h2>
+<p>Set up mixed model equations (MME) by fitting the model <span class="math inline">\(\mathbf{y = 1B + Wa + e}\)</span>, where <span class="math inline">\(\mathbf{B}\)</span> is the intercept, <span class="math inline">\(\mathbf{W}\)</span> is the standardized marker genotypes (<code>Ws</code>), <span class="math inline">\(\mathbf{a}\)</span> is the additive marker genetic effects, and <span class="math inline">\(\mathbf{e}\)</span> is the residual. Directly take the inverse of LHS to obtain the solutions for marker-based GBLUP (RR-BLUP). Report the estimates of intercept and marker additive genetic effects. Use <span class="math inline">\(\lambda = 4326.212\)</span>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">lambda &lt;-<span class="st"> </span><span class="fl">4326.212</span> <span class="co"># fit$Ve / fit$Vu</span>
+ones &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="dv">1</span>, <span class="dt">ncol=</span><span class="dv">1</span>, <span class="dt">nrow=</span>n)
+I &lt;-<span class="st"> </span><span class="kw">diag</span>(m)
+LHS1 &lt;-<span class="st"> </span><span class="kw">cbind</span>(<span class="kw">crossprod</span>(ones), <span class="kw">crossprod</span>(ones, Ws)) 
+LHS2 &lt;-<span class="st"> </span><span class="kw">cbind</span>(<span class="kw">crossprod</span>(Ws, ones), <span class="kw">crossprod</span>(Ws) <span class="op">+</span><span class="st">  </span>I<span class="op">*</span>lambda)
+LHS &lt;-<span class="st"> </span><span class="kw">rbind</span>(LHS1, LHS2)
+RHS &lt;-<span class="st"> </span><span class="kw">rbind</span>( <span class="kw">crossprod</span>(ones, y), <span class="kw">crossprod</span>(Ws,y) )
+sol2 &lt;-<span class="st"> </span><span class="kw">solve</span>(LHS, RHS)
+<span class="kw">head</span>(sol2)
+<span class="kw">tail</span>(sol2)</code></pre></div>
+</div>
+<div id="question-8" class="section level2">
+<h2>Question 8</h2>
+<p>Repeat Question 7 and fit RR-BLUP by using the <code>mixed.solve</code> function in the <a href="https://cran.r-project.org/web/packages/rrBLUP/index.html">rrBLUP</a> R package. Report the estimates of intercept and marker additive genetic effects. Do they agree with the estimates in Question 7? Also, report the ratio of variance components <span class="math inline">\(\lambda = \frac{\sigma^2_e}{\sigma^2_a}\)</span>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(rrBLUP)
+fit2 &lt;-<span class="st"> </span><span class="kw">mixed.solve</span>(<span class="dt">y =</span> y, <span class="dt">Z=</span>Ws)
+<span class="co"># marker additive genetic variance</span>
+fit2<span class="op">$</span>Vu
+<span class="co"># residual variance</span>
+fit2<span class="op">$</span>Ve
+<span class="co"># intercept </span>
+fit2<span class="op">$</span>beta
+<span class="co"># marker additive genetic effects</span>
+<span class="kw">head</span>(fit2<span class="op">$</span>u)
+<span class="kw">tail</span>(fit2<span class="op">$</span>u)
+<span class="co"># ratio of variance components </span>
+fit2<span class="op">$</span>Ve <span class="op">/</span><span class="st"> </span>fit2<span class="op">$</span>Vu</code></pre></div>
+</div>
+<div id="question-9" class="section level2">
+<h2>Question 9</h2>
+<p>Recall that BLUP of marker effects is given by <span class="math inline">\(\mathbf{W}^T (\mathbf{W}\mathbf{W}^T)^{-1} BLUP(\mathbf{u})\)</span>. This suggests that we can go back and forth between GBLUP and RR-BLUP. Convert the esitmated additive genetic values obtained in Question 5 to marker additive genetic effects. Add a very small positive constant (e.g., 0.001) to the diagonals of <span class="math inline">\(\mathbf{WsWs^T}\)</span> if necessary. Do the converted marker additive genetic effects agree with the estimates we obtained in Question 7?</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sol3 &lt;-<span class="st">  </span><span class="kw">t</span>(Ws) <span class="op">%*%</span><span class="st"> </span><span class="kw">solve</span>(Ws <span class="op">%*%</span><span class="st"> </span><span class="kw">t</span>(Ws) <span class="op">+</span><span class="st"> </span><span class="kw">diag</span>(n)<span class="op">*</span><span class="fl">0.001</span>) <span class="op">%*%</span><span class="st"> </span><span class="kw">matrix</span>(sol[<span class="op">-</span><span class="dv">1</span>])
+<span class="kw">head</span>(sol3)
+<span class="kw">head</span>(sol2, <span class="dv">7</span>)[<span class="op">-</span><span class="dv">1</span>]
+<span class="kw">tail</span>(sol3)
+<span class="kw">tail</span>(sol2)</code></pre></div>
+</div>
+<div id="question-10" class="section level2">
+<h2>Question 10</h2>
+<p>Recall that BLUP of marker effects is given by <span class="math inline">\(\mathbf{X}^T (\mathbf{X}\mathbf{X}^T)^{-1} BLUP(\mathbf{u})\)</span>. This suggests that we can go back and forth between GBLUP and RR-BLUP. Convert the esitmated additive genetic values obtained in Question 6 to marker additive genetic effects. Add a very small positive constant (e.g., 0.001) to the diagonals of <span class="math inline">\(\mathbf{XsXs^T}\)</span> if necessary. Do the converted marker additive genetic effects agree with the estimates we obtained in Question 8?</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sol4 &lt;-<span class="st">  </span><span class="kw">t</span>(Ws) <span class="op">%*%</span><span class="st"> </span><span class="kw">solve</span>(Ws <span class="op">%*%</span><span class="st"> </span><span class="kw">t</span>(Ws) <span class="op">+</span><span class="st"> </span><span class="kw">diag</span>(n)<span class="op">*</span><span class="fl">0.001</span>) <span class="op">%*%</span><span class="st"> </span><span class="kw">matrix</span>(fit<span class="op">$</span>u)
+<span class="kw">head</span>(sol4)
+<span class="kw">head</span>(fit2<span class="op">$</span>u)
+<span class="kw">tail</span>(sol4)
+<span class="kw">tail</span>(fit2<span class="op">$</span>u)</code></pre></div>
+</div>
+<div id="question-11" class="section level2">
+<h2>Question 11</h2>
+<p>Repeat 5 (GBLUP) but treat the first 600 individuals as a training set and predict the additive genetic values of the remaining individuals in the testing set. What is the predictive correlation in the testing set? Use <span class="math inline">\(\lambda = 1.348411\)</span>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">n.trn &lt;-<span class="st"> </span><span class="dv">600</span>
+n.tst &lt;-<span class="st"> </span><span class="dv">261</span>
+y.trn &lt;-<span class="st"> </span>y[<span class="dv">1</span><span class="op">:</span>n.trn]
+y.tst &lt;-<span class="st"> </span>y[n.trn<span class="op">+</span><span class="dv">1</span><span class="op">:</span>n.tst]
+Ws.trn &lt;-<span class="st"> </span>Ws[<span class="dv">1</span><span class="op">:</span>n.trn,]
+Ws.tst &lt;-<span class="st"> </span>Ws[n.trn<span class="op">+</span><span class="dv">1</span><span class="op">:</span>n.tst,]
+
+Gtrn &lt;-<span class="st"> </span><span class="kw">tcrossprod</span>(Ws.trn) <span class="op">/</span><span class="st"> </span><span class="kw">ncol</span>(Ws.trn)
+Gtrn &lt;-<span class="st"> </span>Gtrn <span class="op">+</span><span class="st"> </span><span class="kw">diag</span>(n.trn)<span class="op">*</span><span class="fl">0.001</span>
+Gtst.trn &lt;-<span class="st"> </span><span class="kw">tcrossprod</span>(Ws.tst, Ws.trn) <span class="op">/</span><span class="st"> </span><span class="kw">ncol</span>(Ws.tst)
+<span class="co">#Gtrn &lt;- G[1:n.trn, 1:n.trn]</span>
+<span class="co">#Gtst.trn &lt;- G[n.trn+1:n.tst, 1:n.trn]</span>
+
+lambda &lt;-<span class="st"> </span><span class="fl">1.348411</span> <span class="co"># fit$Ve / fit$Vu</span>
+Ginv.trn &lt;-<span class="st"> </span><span class="kw">solve</span>(Gtrn)
+ones &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="dv">1</span>, <span class="dt">ncol=</span><span class="dv">1</span>, <span class="dt">nrow=</span>n.trn)
+Z &lt;-<span class="st"> </span><span class="kw">diag</span>(n.trn)
+LHS1 &lt;-<span class="st"> </span><span class="kw">cbind</span>(<span class="kw">crossprod</span>(ones), <span class="kw">crossprod</span>(ones, Z)) 
+LHS2 &lt;-<span class="st"> </span><span class="kw">cbind</span>(<span class="kw">crossprod</span>(Z, ones), <span class="kw">crossprod</span>(Z) <span class="op">+</span><span class="st">  </span>Ginv.trn<span class="op">*</span>lambda)
+LHS &lt;-<span class="st"> </span><span class="kw">rbind</span>(LHS1, LHS2)
+RHS &lt;-<span class="st"> </span><span class="kw">rbind</span>( <span class="kw">crossprod</span>(ones, y.trn), <span class="kw">crossprod</span>(Z,y.trn) )
+sol.trn &lt;-<span class="st"> </span><span class="kw">solve</span>(LHS, RHS)
+
+<span class="co"># prediction</span>
+y.hat &lt;-<span class="st"> </span>Gtst.trn <span class="op">%*%</span><span class="st"> </span>Ginv.trn <span class="op">%*%</span><span class="st"> </span><span class="kw">matrix</span>(sol.trn[<span class="kw">c</span>(<span class="dv">2</span><span class="op">:</span>(n.trn<span class="op">+</span><span class="dv">1</span>))])
+<span class="kw">cor</span>(y.hat, y[(n.trn<span class="op">+</span><span class="dv">1</span>)<span class="op">:</span>n])</code></pre></div>
+</div>
+<div id="question-12" class="section level2">
+<h2>Question 12</h2>
+<p>Repeat 7 (RR-BLUP) but treat the first 600 individuals as a training set and predict the additive genetic values of the remaining individuals in the testing set. What is the predictive correlation in the testing set? Use <span class="math inline">\(\lambda = 4326.212\)</span>. Also, compare this predictive correlation to the one from Question 11. If computed correctly, these two values should be exactly the same or very similar. Briefly explain why this is the case.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">Ws.trn &lt;-<span class="st"> </span>Ws[<span class="dv">1</span><span class="op">:</span>n.trn, ]
+Ws.tst &lt;-<span class="st"> </span>Ws[n.trn<span class="op">+</span><span class="dv">1</span><span class="op">:</span>n.tst, ]
+lambda &lt;-<span class="st"> </span><span class="fl">4326.212</span> <span class="co"># fit$Ve / fit$Vu</span>
+ones &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="dv">1</span>, <span class="dt">ncol=</span><span class="dv">1</span>, <span class="dt">nrow=</span>n.trn)
+I &lt;-<span class="st"> </span><span class="kw">diag</span>(m)
+LHS1 &lt;-<span class="st"> </span><span class="kw">cbind</span>(<span class="kw">crossprod</span>(ones), <span class="kw">crossprod</span>(ones, Ws.trn)) 
+LHS2 &lt;-<span class="st"> </span><span class="kw">cbind</span>(<span class="kw">crossprod</span>(Ws.trn, ones), <span class="kw">crossprod</span>(Ws.trn) <span class="op">+</span><span class="st">  </span>I<span class="op">*</span>lambda)
+LHS &lt;-<span class="st"> </span><span class="kw">rbind</span>(LHS1, LHS2)
+RHS &lt;-<span class="st"> </span><span class="kw">rbind</span>( <span class="kw">crossprod</span>(ones, y.trn), <span class="kw">crossprod</span>(Ws.trn, y.trn) )
+sol.trn &lt;-<span class="st"> </span><span class="kw">solve</span>(LHS, RHS)
+
+<span class="co"># prediction</span>
+y.hat &lt;-Ws.tst <span class="op">%*%</span><span class="st"> </span><span class="kw">matrix</span>(sol.trn[<span class="op">-</span><span class="dv">1</span>])
+<span class="kw">cor</span>(y.hat, y[(n.trn<span class="op">+</span><span class="dv">1</span>)<span class="op">:</span>n])</code></pre></div>
+</div>
+</div>
+
+
+</div>
+
+<div id="postamble" data-toggle="wy-nav-shift" class="status">
+<p class="author"><span class="glyphicon glyphicon-user"></span> Gota Morota</p>
+<p class="date"><span class="glyphicon glyphicon-calendar"></span> 2019/11/19</p>
+</div>
+
+
+<script>
+$(document).ready(function () {
+ 	  });
+</script>
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
