@@ -2,7 +2,7 @@
 title: "Interactive deterministic formulas for genomic prediction"
 subtitle: "Quantitative Genetics Short Course @UFV"
 author: "Gota Morota <br /><br /> [http://morotalab.org/](http://morotalab.org/)"
-date: "2019/11/19"
+date: "2019/11/20"
 output:
   xaringan::moon_reader:
     lib_dir: libs
