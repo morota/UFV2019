@@ -1,6 +1,6 @@
 ---
 title: "Factor analytic model for high-dimensional phenotypic data"
-author: "Haipeng Yu <br/> Gota Morota"
+author: “Haipeng Yu<br>[<font color=‘white’>https://haipengu.github.io/</font>](https://haipengu.github.io/)<br>Gota Morota<br>[<font color=‘white’>http://morotalab.org/</font>](http://morotalab.org/)”
 date: "2019/11/21"
 output: 
     prettydoc::html_pretty:
@@ -13,8 +13,6 @@ bibliography: lab4.bib
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
 ```
-
-This computer lab exercise was written by  [Haipeng Yu](https://haipengu.github.io/) and [Gota Morota](http://morotalab.org/). 
 
 ## Background
 Phenotypes are often correlated because of pleiotropy or linkage disequilibrium of QTLs in the complex traits system. A multi-trait mixed model is prevalent in quantiative genetics because it can account for genetic or environmental covariances among phenotypes. Nevertheless, there is a concern of computational efficiency when the number of phenotypes is large, particularly when phenotypes are collected using high-throughput phenotyping platforms. 
