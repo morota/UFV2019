@@ -33,8 +33,8 @@ pheno <- read.table('Arabidopsis.txt', header = TRUE)
 dim(pheno) # 372  10
 ```
 
-## Fit Exploratory Factor Analysis (EFA)
-When we have no biological prior knowledge regarding the number of factors, EFA can be used to search the underlying factors and infer network structure between factors and phenotypes. Three steps have been implemented to fit the EFA: 1) identify the number of factors underlying observed phenotypes; 2) fit the EFA model using the number of factors detected in the first step; 3) initiate a clear network structure between factors and phenotypes using the factor loading coefficients derived from step 2.  
+## Exploratory Factor Analysis (EFA)
+When we have no biological prior knowledge regarding the number of factors, EFA can be used to search the underlying factors and infer the latent structure. The EFA is consisted of three steps: 1) identify the number of factors underlying observed phenotypes; 2) fit the EFA model using the number of factors detected in the first step; 3) initiate a clear network structure between factors and phenotypes using the factor loading coefficients derived from step 2.  
 
 ### Step1: explore the number of factors under the phenotypes
 ```{r, eval=FALSE, echo=TRUE}
@@ -80,7 +80,7 @@ CFA.Model <- '
 # 6
 Area  =~ Area_Day21 + Area_Growth + Area_Day29_MPH + Area_Day21_MPH + 
 Area_Day29 + Area_Growth_MPH
-# 7
+# 4
 FloweringTime =~ LTF + LTF_MPH + DTF_MPH + DTF
 '
 

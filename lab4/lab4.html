@@ -108,7 +108,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li><a href="#background">Background</a></li>
 <li><a href="#load-r-packages">Load R packages</a></li>
 <li><a href="#data-import">Data import</a></li>
-<li><a href="#fit-exploratory-factor-analysis-efa">Fit Exploratory Factor Analysis (EFA)</a><ul>
+<li><a href="#exploratory-factor-analysis-efa">Exploratory Factor Analysis (EFA)</a><ul>
 <li><a href="#step1-explore-the-number-of-factors-under-the-phenotypes">Step1: explore the number of factors under the phenotypes</a></li>
 <li><a href="#step2-fit-efa-model-using-the-number-of-factors-2-identified-in-step-1">Step2: fit EFA model using the number of factors (2) identified in step 1</a></li>
 <li><a href="#step-3-construct-a-clear-network-structure-between-factors-and-phenotypes-by-eliminating-the-cross-loadings">Step 3: construct a clear network structure between factors and phenotypes by eliminating the cross-loadings</a></li>
@@ -140,9 +140,9 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 pheno &lt;-<span class="st"> </span><span class="kw">read.table</span>(<span class="st">'Arabidopsis.txt'</span>, <span class="dt">header =</span> <span class="ot">TRUE</span>)
 <span class="kw">dim</span>(pheno) <span class="co"># 372  10</span></code></pre></div>
 </div>
-<div id="fit-exploratory-factor-analysis-efa" class="section level2">
-<h2>Fit Exploratory Factor Analysis (EFA)</h2>
-<p>When we have no biological prior knowledge regarding the number of factors, EFA can be used to search the underlying factors and infer network structure between factors and phenotypes. Three steps have been implemented to fit the EFA: 1) identify the number of factors underlying observed phenotypes; 2) fit the EFA model using the number of factors detected in the first step; 3) initiate a clear network structure between factors and phenotypes using the factor loading coefficients derived from step 2.</p>
+<div id="exploratory-factor-analysis-efa" class="section level2">
+<h2>Exploratory Factor Analysis (EFA)</h2>
+<p>When we have no biological prior knowledge regarding the number of factors, EFA can be used to search the underlying factors and infer the latent structure. The EFA is consisted of three steps: 1) identify the number of factors underlying observed phenotypes; 2) fit the EFA model using the number of factors detected in the first step; 3) initiate a clear network structure between factors and phenotypes using the factor loading coefficients derived from step 2.</p>
 <div id="step1-explore-the-number-of-factors-under-the-phenotypes" class="section level3">
 <h3>Step1: explore the number of factors under the phenotypes</h3>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># calculate phenotypic correlation between traits </span>
@@ -191,7 +191,7 @@ CFA.Model &lt;-<span class="st"> '</span>
 <span class="st"># 6</span>
 <span class="st">Area  =~ Area_Day21 + Area_Growth + Area_Day29_MPH + Area_Day21_MPH + </span>
 <span class="st">Area_Day29 + Area_Growth_MPH</span>
-<span class="st"># 7</span>
+<span class="st"># 4</span>
 <span class="st">FloweringTime =~ LTF + LTF_MPH + DTF_MPH + DTF</span>
 <span class="st">'</span>
 
