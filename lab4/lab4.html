@@ -97,7 +97,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <header>
 <div class="inner">
 <h1 class="title toc-ignore">Factor analytic model for high-dimensional phenotypic data</h1>
-<h3 class="author">“Haipeng Yu<br><a href="https://haipengu.github.io/"><font color="‘white’">https://haipengu.github.io/</font></a><br>Gota Morota<br><a href="http://morotalab.org/"><font color="‘white’">http://morotalab.org/</font></a>”</h3>
+<h3 class="author">Haipeng Yu<br><a href="https://haipengu.github.io/"><font color="‘white’">https://haipengu.github.io/</font></a><br>Gota Morota<br><a href="http://morotalab.org/"><font color="‘white’">http://morotalab.org/</font></a></h3>
 <h3 class="date">2019/11/21</h3>
 </div>
 </header>
@@ -142,7 +142,7 @@ pheno &lt;-<span class="st"> </span><span class="kw">read.table</span>(<span cla
 </div>
 <div id="fit-exploratory-factor-analysis-efa" class="section level2">
 <h2>Fit Exploratory Factor Analysis (EFA)</h2>
-<p>When there is no biological prior knowledge about the potential number of factors under the observed phenotypes, an exploratory factor analysis (EFA) could be exploited to search the underlying factors and the network structure between factors and phenotypes. Three steps have been implemented to fit the EFA: 1) identify the number of factors underlying observed phenotypes; 2) fit the EFA model using the number of factors detected in the first step; 3) initiate a clear network structure between factors and phenotypes using the factor loading coefficients derived from step 2.</p>
+<p>When we have no biological prior knowledge regarding the number of factors, EFA can be used to search the underlying factors and infer network structure between factors and phenotypes. Three steps have been implemented to fit the EFA: 1) identify the number of factors underlying observed phenotypes; 2) fit the EFA model using the number of factors detected in the first step; 3) initiate a clear network structure between factors and phenotypes using the factor loading coefficients derived from step 2.</p>
 <div id="step1-explore-the-number-of-factors-under-the-phenotypes" class="section level3">
 <h3>Step1: explore the number of factors under the phenotypes</h3>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># calculate phenotypic correlation between traits </span>

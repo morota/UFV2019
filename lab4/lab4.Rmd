@@ -1,6 +1,6 @@
 ---
 title: "Factor analytic model for high-dimensional phenotypic data"
-author: “Haipeng Yu<br>[<font color=‘white’>https://haipengu.github.io/</font>](https://haipengu.github.io/)<br>Gota Morota<br>[<font color=‘white’>http://morotalab.org/</font>](http://morotalab.org/)”
+author: "Haipeng Yu<br>[<font color=‘white’>https://haipengu.github.io/</font>](https://haipengu.github.io/)<br>Gota Morota<br>[<font color=‘white’>http://morotalab.org/</font>](http://morotalab.org/)"
 date: "2019/11/21"
 output: 
     prettydoc::html_pretty:
@@ -34,7 +34,7 @@ dim(pheno) # 372  10
 ```
 
 ## Fit Exploratory Factor Analysis (EFA)
-When there is no biological prior knowledge about the potential number of factors under the observed phenotypes, an exploratory factor analysis (EFA) could be exploited to search the underlying factors and the network structure between factors and phenotypes. Three steps have been implemented to fit the EFA: 1) identify the number of factors underlying observed phenotypes; 2) fit the EFA model using the number of factors detected in the first step; 3) initiate a clear network structure between factors and phenotypes using the factor loading coefficients derived from step 2.  
+When we have no biological prior knowledge regarding the number of factors, EFA can be used to search the underlying factors and infer network structure between factors and phenotypes. Three steps have been implemented to fit the EFA: 1) identify the number of factors underlying observed phenotypes; 2) fit the EFA model using the number of factors detected in the first step; 3) initiate a clear network structure between factors and phenotypes using the factor loading coefficients derived from step 2.  
 
 ### Step1: explore the number of factors under the phenotypes
 ```{r, eval=FALSE, echo=TRUE}
