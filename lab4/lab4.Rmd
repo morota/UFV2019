@@ -97,7 +97,7 @@ colnames(bfs_all) <- c('Area', 'FloweringTime')
 head(bfs_all)
 ```
 
-The estimated factor scores of factors of Area and Flowering Time could be considered as new phenotypes and used for analysis. Be aware that I only used a small number of burn-in and Gibbs sampling for illustrative purposes. In practice, a large number should be used and the convergency should be checked. Be aware that I used a small number of burn-in and Gibbs sampling only for illustrative purposes. In practice, a larger number could be used according to the convergence test. 
+The estimated factor scores of factors of Area and Flowering Time could be considered as new phenotypes and used for analysis. Be aware that I only used a small number of burn-in and Gibbs sampling for illustrative purposes. In practice, a large number should be used and the convergency should be checked.
 
 ## References
 
