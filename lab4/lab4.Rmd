@@ -104,7 +104,7 @@ Note that we used a small number of burn-in and Gibbs sampling for an illustrati
 ```{r, eval=FALSE, echo=TRUE}
 parameterEstimates(CFA.fit, standardized=TRUE) %>%
  filter(op == "=~") %>%
- select('Latent Variable' = lhs, 'Observed Phenotypes’' = rhs, 'Estimate' = std.all) %>%
+ select('Latent Variable' = lhs, 'Observed Phenotypes' = rhs, 'Estimate' = std.all) %>%
     kable(digits = 3, format='html', caption ='Standardized Factor Loadings') 
 ```
 

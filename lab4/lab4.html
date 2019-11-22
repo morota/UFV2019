@@ -213,7 +213,7 @@ CFA.fit &lt;-<span class="st"> </span><span class="kw">bcfa</span>(CFA.Model, <s
 <h3>Estimate factor loadings</h3>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">parameterEstimates</span>(CFA.fit, <span class="dt">standardized=</span><span class="ot">TRUE</span>) <span class="op">%&gt;%</span>
 <span class="st"> </span><span class="kw">filter</span>(op <span class="op">==</span><span class="st"> &quot;=~&quot;</span>) <span class="op">%&gt;%</span>
-<span class="st"> </span><span class="kw">select</span>(<span class="st">'Latent Variable'</span> =<span class="st"> </span>lhs, <span class="st">'Observed Phenotypes’'</span> =<span class="st"> </span>rhs, <span class="st">'Estimate'</span> =<span class="st"> </span>std.all) <span class="op">%&gt;%</span>
+<span class="st"> </span><span class="kw">select</span>(<span class="st">'Latent Variable'</span> =<span class="st"> </span>lhs, <span class="st">'Observed Phenotypes'</span> =<span class="st"> </span>rhs, <span class="st">'Estimate'</span> =<span class="st"> </span>std.all) <span class="op">%&gt;%</span>
 <span class="st">    </span><span class="kw">kable</span>(<span class="dt">digits =</span> <span class="dv">3</span>, <span class="dt">format=</span><span class="st">'html'</span>, <span class="dt">caption =</span><span class="st">'Standardized Factor Loadings'</span>) </code></pre></div>
 <table>
 <caption>
