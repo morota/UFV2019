@@ -1,5 +1,5 @@
 ---
-title: "Factor analytic model for high-dimensional phenotypic data"
+title: "Phenotypic factor analytic model"
 author: "Haipeng Yu<br>[<font color=‘white’>https://haipengu.github.io/</font>](https://haipengu.github.io/)<br>Gota Morota<br>[<font color=‘white’>http://morotalab.org/</font>](http://morotalab.org/)"
 date: "2019/11/21"
 output: 
@@ -17,87 +17,175 @@ knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
 ## Background
 Phenotypes are often correlated because of pleiotropy or linkage disequilibrium of QTLs in the complex traits system. A multi-trait mixed model is prevalent in quantiative genetics because it can account for genetic or environmental covariances among phenotypes. Nevertheless, there is a concern of computational efficiency when the number of phenotypes is large, particularly when phenotypes are collected using high-throughput phenotyping platforms. 
 
-One alternative approach is to use a factor analytic (FA) model. A FA model assumes that observed phenotypes are generated from underlying unobserved latent variables or factors. In this tutorial, we introduce two types of FA models: exploratory factor analysis (EFA) and confirmatory factor analysis (CFA). We selected ten phenotypes (Area_Day21, Area_Growth, Area_Day29_MPH, Area_Day21_MPH, Area_Day29, Area_Growth_MPH, LTF, LTF_MPH, DTF_MPH, and DTF) from a public Arabidopsis data [@seymour2016genetic] to illustrate how FA models can be fitted. The Arabidopsis data set used in this tutorial can be found in [easyGWAS](https://easygwas.ethz.ch/data/public/phenotypes/1/42/) (Arabidopsis thaliana -> F1 Hybrids Seymour et. al. 2016, PNAS). Alternatively, you can downloand the data set directly from [here](https://github.com/HaipengU/Data_file/tree/master/Arabidopsis_data).
+One alternative approach is to use a factor analytic (FA) model. A FA model assumes that observed phenotypes are generated from underlying unobserved latent variables or factors. In this tutorial, we introduce two types of FA models: exploratory factor analysis (EFA) and confirmatory factor analysis (CFA). We selected ten phenotypes (Area_Day21, Area_Growth, Area_Day29_MPH, Area_Day21_MPH, Area_Day29, Area_Growth_MPH, LTF, LTF_MPH, DTF, and DTF_MPH) from a public Arabidopsis data [@seymour2016genetic] to illustrate how FA models can be fitted. The Arabidopsis data set used in this tutorial can be found in [easyGWAS](https://easygwas.ethz.ch/data/public/phenotypes/1/42/) (Arabidopsis thaliana -> F1 Hybrids Seymour et. al. 2016, PNAS). Alternatively, you can downloand the data set directly from [here](https://github.com/HaipengU/Data_file/tree/master/Arabidopsis_data).
 
 ## Load R packages
 ```{r}
+# install.packages("blavaan")
 library(blavaan)
+# install.packages("pheatmap")
 library(pheatmap)
+# install.packages("psych")
 library(psych)
+
+library(dplyr)
+library(tidyr)
 ```
 
 ## Data import
 ```{r, eval=FALSE, echo=TRUE}
-# import ten Arabidopsis phenotypes
-pheno <- read.table('Arabidopsis.txt', header = TRUE)
+# Import 10 Arabidopsis phenotypes
+pheno <- read.table('Arabidopsis.txt', header = TRUE, stringsAsFactors = FALSE)
 dim(pheno) # 372  10
+head(pheno)
 ```
 
 ## Exploratory Factor Analysis (EFA)
-When we have no biological prior knowledge regarding the number of factors, EFA can be used to search the underlying factors and infer the latent structure. The EFA is consisted of three steps: 1) identify the number of factors underlying observed phenotypes; 2) fit the EFA model using the number of factors detected in the first step; 3) initiate a clear network structure between factors and phenotypes using the factor loading coefficients derived from step 2.  
+When we have no biological prior knowledge regarding the number of factors, EFA can be used to search the underlying factors and infer the latent structure. The EFA is consisted of three steps: 1) identify the number of factors underlying observed phenotypes; 2) fit the EFA model based on the number of factors estimated in 1); and 3) establish the latent structure between factors and phenotypes from factor loading coefficients derived from 2).  
 
-### Step1: explore the number of factors under the phenotypes
+### Step 1: Estimate the number of factors
 ```{r, eval=FALSE, echo=TRUE}
-# calculate phenotypic correlation between traits 
+# phenotypic correlation among traits 
 COR <- cor(pheno, use = "complete.obs")
 
-# parallel analysis to identify underlying factors using phenotypic correlation
+# parallel analysis to identify the number of underlying factors 
 fa.parallel(COR, n.obs = 123, fa = "fa", n.iter = 100, error.bars = FALSE,
             se.bars = FALSE, ylabel = 'Eigen values of factors', fm = 'mle')
 ```
 
-The general logic of parallel analysis is extracting the factors by comparing the eigenvalues of observed data and a data set simulated from observed data until observed data have a smaller eigenvalue than simulated data. The parallel scree plot suggested two factors underlying the observed phenotypes. 
-
 ![](screeplot.png)
 
-### Step2: fit EFA model using the number of factors (2) identified in step 1
+The parallel analysis infers the number of factors by comparing the eigenvalues of observed data and the eigenvalues simulated from random data. One criterion to set the number of factors is to count how many eigenvalues from observed data are larger than the eigenvalues from the random data. From the above figure, this number equals two in our example. 
+
+### Step2: Fit EFA model
 ```{r, eval=FALSE, echo=TRUE}
-# fit EFA model using maximum likelihood estimation
+# fit a maximum likelihood-based EFA model by assuming two factors
 fit.mle <- fa(COR, nfactors = 2, fm = "ml", max.iter = 100,
               rotate = "varimax")
-# extract factor loading coefficients
-Load <- round(fit.mle$loadings, digits = 2)
 
-# display the factor loadings using heatmap
-pheatmap(Load, display_numbers = TRUE, cluster_cols = FALSE, angle_col = 0, 
+# extract factor loading coefficients
+loading <- round(fit.mle$loadings, digits = 2)
+
+# display the factor loadings using a heatmap
+pheatmap(loading, display_numbers = TRUE, cluster_cols = FALSE, angle_col = 0, 
          main = 'Factor loading coefficients', fontsize_number = 10)
 ```
 
 ![](heatmap.png)
 
-The factor loading heatmap implies the first factor (ML1) has a large contribution (factor loading coefficients) to Area associated traits, and the second factor (ML2) displays a large loading to the flowering time associated traits (i.e., LTF, LTF_MPH, DTF_MPH, and DTF). 
+The factor loading heatmap shows the pattern between the observed phenotypes and factors. We can see that the first factor (ML1) has large factor loading coefficients to the area associated traits, while the second factor (ML2) presents large loadings to the reproductive transition phase (RTP) related traits (i.e., LTF, LTF_MPH, DTF, and DTF_MPH,). 
 
-### Step 3: construct a clear network structure between factors and phenotypes by eliminating the cross-loadings
+### Step 3: Establish the latent structure
+According to the factor loading heatmap, it is possible to eliminate cross-loadings (i.e., phenotype receives factor loadings from more than one factor) by highlighting the highest loading. The inferred latent sturture between the observed phenotypes and factors is shown below. We can assign a biological interpretation to those factors: Area and RTP.  
+
 ![](Network.png)
 
-Using the factor loading heatmap in step 2, a clear network structure between factors and observed phenotypes was constructed by eliminating the cross-loading (i.e., phenotype has factor loadings from more than one factor). This network structure was created by assigning observed phenotypes to corresponding factors with larger positive factor loading coefficients. Two biological names were assigned to the first and second factors as Area and Flowering Time based on the characteristic of the mapping between observed phenotypes and factors. 
-
-## Fit confirmatory factor analysis (CFA) 
-A confirmatory factor analysis (CFA) model requires a prior of underlying network structure between factors and observed phenotypes. Using the network structure constructed in EFA, a CFA model was fitted to estimate the factor scores of Area and Flowering Time. 
+## Confirmatory factor analysis (CFA)
+A CFA model assumes that a latent structure is known. We can fit a CFA model based on the latent structure inferred from EFA. 
 ```{r, eval=FALSE, echo=TRUE}
-# create CFA model structure using the network structure identified in EFA model
+# CFA model specification
 CFA.Model <- '
 # 6
 Area  =~ Area_Day21 + Area_Growth + Area_Day29_MPH + Area_Day21_MPH + 
 Area_Day29 + Area_Growth_MPH
 # 4
-FloweringTime =~ LTF + LTF_MPH + DTF_MPH + DTF
+RTP =~ LTF + LTF_MPH + DTF_MPH + DTF
 '
 
-# fit the CFA modeling with bcfa function within blavaan package using the structure defined above
+# fit the CFA model 
 CFA.fit <- bcfa(CFA.Model, data = pheno,
                 burnin = 200, sample = 200, target = "stan",
                 save.lvs = T, n.chains = 2)
 ```
 
-### calculate factor scores
+Note that we used a small number of burn-in and Gibbs sampling for an illustrative purpose. In practice, sufficient MCMC samples should be considered and model convergence should be checked.
+
+### Estimate factor loadings
 ```{r, eval=FALSE, echo=TRUE}
-bfs_all <- blavInspect(CFA.fit, 'lvmeans') 
-colnames(bfs_all) <- c('Area', 'FloweringTime')
-head(bfs_all)
+parameterEstimates(CFA.fit, standardized=TRUE) %>%
+ filter(op == "=~") %>%
+ select('Latent Variable' = lhs, 'Observed Phenotypes’' = rhs, 'Estimate' = std.all) %>%
+    kable(digits = 3, format='html', caption ='Standardized Factor Loadings') 
 ```
 
-The estimated factor scores of factors of Area and Flowering Time could be considered as new phenotypes and used for analysis. Be aware that I only used a small number of burn-in and Gibbs sampling for illustrative purposes. In practice, a large number should be used and the convergency should be checked.
+<table>
+<caption>Standardized Factor Loadings</caption>
+ <thead>
+  <tr>
+   <th style="text-align:left;"> Latent Variable </th>
+   <th style="text-align:left;"> Observed Phenotypes’ </th>
+   <th style="text-align:right;"> Estimate </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;"> Area </td>
+   <td style="text-align:left;"> Area_Day21 </td>
+   <td style="text-align:right;"> 0.846 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Area </td>
+   <td style="text-align:left;"> Area_Growth </td>
+   <td style="text-align:right;"> 0.987 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Area </td>
+   <td style="text-align:left;"> Area_Day29_MPH </td>
+   <td style="text-align:right;"> 0.839 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Area </td>
+   <td style="text-align:left;"> Area_Day21_MPH </td>
+   <td style="text-align:right;"> 0.751 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Area </td>
+   <td style="text-align:left;"> Area_Day29 </td>
+   <td style="text-align:right;"> 1.000 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Area </td>
+   <td style="text-align:left;"> Area_Growth_MPH </td>
+   <td style="text-align:right;"> 0.836 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> RTP </td>
+   <td style="text-align:left;"> LTF </td>
+   <td style="text-align:right;"> 0.874 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> RTP </td>
+   <td style="text-align:left;"> LTF_MPH </td>
+   <td style="text-align:right;"> 0.669 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> RTP </td>
+   <td style="text-align:left;"> DTF_MPH </td>
+   <td style="text-align:right;"> 0.740 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> RTP </td>
+   <td style="text-align:left;"> DTF </td>
+   <td style="text-align:right;"> 0.900 </td>
+  </tr>
+</tbody>
+</table>
+
+### Estimate factor scores
+```{r, eval=FALSE, echo=TRUE}
+bfs_all <- blavInspect(CFA.fit, 'lvmeans') 
+colnames(bfs_all) <- c('Area', 'RTP')
+head(bfs_all)
+           Area          RTP
+[1,]  -1.328089  0.001999496
+[2,] -10.467880  0.028819467
+[3,]   4.738378 -0.009752476
+[4,]   3.049506 -0.019339391
+[5,]  -7.811509  0.023633191
+[6,]  -3.666438  0.010334994
+```
+
+The estimated factor scores for Area and RTP can be used as new phenotypes for subsequent analyses. 
 
 ## References
 
