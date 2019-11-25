@@ -57,7 +57,7 @@ fa.parallel(COR, n.obs = 123, fa = "fa", n.iter = 100, error.bars = FALSE,
 
 The parallel analysis infers the number of factors by comparing the eigenvalues of observed data and the eigenvalues simulated from random data. One criterion to set the number of factors is to count how many eigenvalues from observed data are larger than the eigenvalues from the random data. From the above figure, this number equals two in our example. 
 
-### Step2: Fit EFA model
+### Step 2: Fit EFA model
 ```{r, eval=FALSE, echo=TRUE}
 # fit a maximum likelihood-based EFA model by assuming two factors
 fit.mle <- fa(COR, nfactors = 2, fm = "ml", max.iter = 100,
@@ -185,7 +185,7 @@ head(bfs_all)
 [6,]  -3.666438  0.010334994
 ```
 
-The estimated factor scores for Area and RTP can be used as new phenotypes for subsequent analyses. 
+The estimated factor scores for Area and RTP can be used as new phenotypes for subsequent genetic analyses. 
 
 ## References
 

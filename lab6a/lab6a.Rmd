@@ -1,0 +1,216 @@
+---
+title: "Bayesian Network"
+author: "Haipeng Yu<br>[<font color=‘white’>https://haipengu.github.io/</font>](https://haipengu.github.io/)<br>Gota Morota<br>[<font color=‘white’>http://morotalab.org/</font>](http://morotalab.org/)"
+date: "2019/11/25"
+output: 
+    prettydoc::html_pretty:
+      theme: architect
+      highlight: vignette
+      toc: true
+bibliography: references_rice.bib
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+```
+
+## Introduction
+A Bayesian network (BN) describes the joint probability distribution of random variables through their conditional dependencies/independencies and represents as a graphical model (directed acyclic graph)[@scutari2014bayesian]. Thus, a BN provides an approach to decipher the probabilistic dependencies among variables of interest and has been applied in plant and animal genetics [@morota2012assessment; @yu2019genomic]. 
+
+In the following examples, we use the `bnlearn` package [@JSSv035i03] to infer the BN of seven rice phenotypes including Na+, K+, and Na+: K+ content in roots and shoots [@yu2019genomic]. The rice genotypes are from the Rice Diversity Panel 1 [@zhao2011genome]. We will use two different approaches to infer BN: 1) data-driven approach and 2) the combination of the data-driven approach and prior knowledge. You can download the rice dataset  [here](https://github.com/HaipengU/Data_file). 
+
+
+## Load R packages
+```{r}
+# install.packages("bnlearn")
+library(bnlearn)
+# install.packages("cowplot")
+library(cowplot)
+# install.packages("ggplot2")
+library(ggplot2)
+# install.packages("gaston")
+library(gaston)
+# BiocManager::install("Rgraphviz")
+library(Rgraphviz)
+# install.packages("devtools")
+library(devtools)
+# install_github("QuantGen/MTM")
+library(MTM)
+```
+
+## Data import
+```{r}
+rm(list = ls())
+
+# Import phenotypes
+pheno <- read.csv("salt_phenotypes.csv", row.names = 1)
+dim(pheno) # 385   7
+pheno <- na.omit(pheno) # remove NAs
+dim(pheno) # 366   7
+head(pheno)
+
+# Import genotype
+geno <- read.bed.matrix("sativas413")
+dim(geno) # 413 36901
+## Subset accesions with both genotype and phenotype records  
+geno@ped$id <- paste0("NSFTV_", geno@ped$id)
+geno <- geno[geno@ped$id %in% row.names(pheno), ]
+dim(geno) # 363 36901
+pheno <- pheno[match(geno@ped$id, row.names(pheno)), ]
+dim(pheno) # 363   7
+## Check if the ids of genotypes and phenotypes are identical
+table(geno@ped$id == rownames(pheno))
+```
+
+## Construct a genomic relationship matrix
+```{r}
+# Quality control of genotypes 
+geno <- select.snps(geno, c(maf > 0.05 & callrate > 0.9))
+dim(geno) # 363 29499
+
+# Construct a genomic relationship matrix
+grm <- GRM(geno)
+dim(grm) # 363 363
+
+```
+
+## Fit a multivariate mixed model to obtain estimated breeding values (EBV)
+```{r, results = 'hide'}
+# Define the MTM_func using the MTM Package
+MTM_func <- function(Y, G, nTrait, nIter, burnIn, thin, prefix) {
+  library(MTM)
+  set.seed(007) # reproducible results
+  MTM ( Y = Y, K = list ( list ( K = G, COV = list ( type = 'UN', df0 = nTrait,
+        S0 = diag (nTrait) ) ) ), resCov = list ( type = 'UN', S0 = diag (nTrait), 
+        df0 = nTrait), nIter = nIter, burnIn = burnIn, thin = thin, saveAt = prefix)
+}
+
+Y <- scale(pheno, center = TRUE, scale = TRUE)
+G <- grm
+nTrait <- ncol(Y)
+MTM_fit <- MTM_func(Y = Y, G = G, nTrait = nTrait, nIter = 1200, burnIn = 200, thin = 5, prefix  = 'MTM_fit')
+
+## Check Gibbs samples
+list.files(pattern = 'MTM_fit')
+## Retrieve estimates
+str(MTM_fit)
+BV <- MTM_fit$K[[1]]$U # estimated breeding values
+dim(BV) # 363   7
+head(BV)
+colnames(BV) <- colnames(pheno)
+BV <- as.data.frame(BV)
+head(BV)
+```
+
+## Structure learning using EBV
+```{r}
+## Check strength and direction in BN
+check_boot <- function(boot, Strength_Thres, Direction_Thres) {
+  boot[(boot$strength >= Strength_Thres) & (boot$direction > Direction_Thres),]
+}
+```
+
+
+### Structure learning: data-driven approach
+```{r}
+# Score-based algorithm: Tabu Search 
+tabu_simple <- tabu(BV) 
+graphviz.plot(tabu_simple, main = "Tabu_data-driven", shape = "ellipse", 
+              layout = "dot")
+# Model Averaging with 500 bootstrap samples to account for uncertainty
+set.seed(007) 
+boot_tabu <- boot.strength (BV, algorithm = "tabu", R = 500)
+# Check strength (>= 0.8) and direction (> 0.5)
+check_boot(boot_tabu, 0.8, 0.5)
+# Average bootstrap samples using threshold = 0.8
+ave_model_tabu <- averaged.network(boot_tabu, threshold = 0.8)
+graphviz.plot(ave_model_tabu, shape = 'ellipse')
+```
+
+### Structure learning: data + prior knowledge
+If prior knowledge regarding the network structure is available, it is possible to incorporate this into the process of structure learning. We can add and eliminate the edge using arguments of `whitelist` and `blacklist`, accordingly. 
+```{r}
+# Score-based algorithm: Tabu Search
+tabu_simple <- tabu(BV) 
+graphviz.plot(tabu_simple, main = "Tabu", shape = "ellipse", layout = "dot")
+# Incorporate subjective prior
+whtlist <- c(from = 'Na.K.Root', to = 'Na.K.Shoot')
+blklist <- data.frame(from = c("K.Shoot.Salt", "K.Shoot.Control" ), 
+                      to = c("K.Shoot.Control", "K.Shoot.Salt"))
+# Data + subjective prior
+tabu_blk <- tabu(BV, whitelist = whtlist, blacklist = blklist) 
+graphviz.plot(tabu_blk, main = "Tabu_data-and-prior", shape = "ellipse", 
+              layout = "dot")
+```
+
+## Remove the dependence in EBV with Cholesky Decomposition
+Theoretically, BN learning algorithms assume sample independence. However, the genomic relationship matrix introduces dependencies among EBV, which may act as a confounder. We can transform EBV to obtain adjusted EBV by eliminating the dependencies. 
+We can decompose $\mathbf{G}$ into its Cholesky factors $\mathbf{G} = \mathbf{L} \mathbf{L'}$. Here, $\mathbf{L}$ is an $n \times n$ lower triangular matrix. For a single trait we can remove the dependancy from the BV $\mathbf{u}$ and yield the adjusted breeding values $\mathbf{u^*}$ by $\mathbf{u^*} = \mathbf{L^{-1}} \mathbf{u}$. When we have $t$ traits, the dimension of $\mathbf{u}$ becomes $(n \times t) \times 1$ and $\mathbf{u^*} = \mathbf{M^{-1}} \mathbf{u}$, where $\mathbf{M^{-1}} = \mathbf{I_{(n \times t) \times (n \times t)}} \otimes \mathbf{L^{-1}}$.
+
+```{r}
+Linv <- solve(t(chol(grm)))
+Minv <- kronecker(diag(7), Linv)
+BV_adj <- matrix(Minv %*% c(as.matrix(BV)), nrow = 363, ncol = 7)
+colnames(BV_adj) <- names(pheno)
+BV_adj <- as.data.frame(BV_adj)
+```
+
+### Structure learning: data-driven approach
+```{r}
+# Score-based algorithm: Tabu Search 
+tabu_simple <- tabu(BV_adj) 
+graphviz.plot(tabu_simple, main = "Tabu", shape = "ellipse", layout = "dot")
+# Model Averaging with 500 bootstrap samples to account for uncertainty
+set.seed(007)
+boot_tabu <- boot.strength (BV_adj, algorithm = "tabu", R = 500)
+# Check strength (>= 0.8) and direction (> 0.5)
+check_boot(boot_tabu, 0.8, 0.5)
+# Average bootstrap samples use threshold = 0.8 
+ave_model_tabu <- averaged.network(boot_tabu, threshold = 0.8)
+graphviz.plot(ave_model_tabu, shape = 'ellipse')
+```
+
+### Structure learning: data + prior knowledge 
+```{r}
+# Score-based algorithm: Tabu Search
+tabu_simple <- tabu(BV_adj) 
+graphviz.plot(tabu_simple, main = "Tabu", shape = "ellipse", layout = "dot")
+# Incorporate subjective prior
+whtlist <- c(from = 'Na.K.Root', to = 'Na.K.Shoot')
+blklist <- data.frame(from = c("K.Shoot.Salt", "K.Shoot.Control" ), 
+                      to = c("K.Shoot.Control", "K.Shoot.Salt"))
+# Data + subjective prior
+tabu_blk <- tabu(BV_adj, whitelist = whtlist, blacklist = blklist) 
+graphviz.plot(tabu_blk, main = "Tabu_data-and-prior", shape = "ellipse", 
+              layout = "dot")
+```
+
+## Available BN learning algorithms in the `bnlearn` package
+In the above examples, we used the score-based algorithm Tabu Search for structure learning. Alternatively, you can use other algorithms by replacing the `tabu()` function and the `algorithm = "tabu"` argument in the `boot.strength()` function with the followings. The details can be found in the help page of [bnlearn](http://www.bnlearn.com/).
+
+* Score-based structure learning algorithms:
+    + hc: Hill Climbing (HC)
+    + tabu: Tabu Search (Tabu)
+    
+* Constraint-based structure learning algorithms:
+    + pc.stable : the first practical application of the IC algorithm
+    + gs: Grow-Shrink (GS)
+    + iamb: Incremental Association Markov Blanket (IAMB)
+    + fast.iamb: Fast Incremental Association (Fast-IAMB)
+    + inter.iamb: Interleaved Incremental Association (Inter-IAMB)
+    + mmpc: Max-Min Parents & Children (MMPC)
+    + si.hiton.pc: Semi-Interleaved Hiton-PC (SI-HITON-PC)
+    
+* Hybrid structure learning algorithms:
+    + mmhc: Max-Min Hill Climbing (MMHC) 
+    + rsmax2: General 2-Phase Restricted Maximization (RSMAX2)
+
+## References
+
+
+
+
+
+
+
+

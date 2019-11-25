@@ -110,7 +110,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li><a href="#data-import">Data import</a></li>
 <li><a href="#exploratory-factor-analysis-efa">Exploratory Factor Analysis (EFA)</a><ul>
 <li><a href="#step-1-estimate-the-number-of-factors">Step 1: Estimate the number of factors</a></li>
-<li><a href="#step2-fit-efa-model">Step2: Fit EFA model</a></li>
+<li><a href="#step-2-fit-efa-model">Step 2: Fit EFA model</a></li>
 <li><a href="#step-3-establish-the-latent-structure">Step 3: Establish the latent structure</a></li>
 </ul></li>
 <li><a href="#confirmatory-factor-analysis-cfa">Confirmatory factor analysis (CFA)</a><ul>
@@ -165,8 +165,8 @@ COR &lt;-<span class="st"> </span><span class="kw">cor</span>(pheno, <span class
 </div>
 <p>The parallel analysis infers the number of factors by comparing the eigenvalues of observed data and the eigenvalues simulated from random data. One criterion to set the number of factors is to count how many eigenvalues from observed data are larger than the eigenvalues from the random data. From the above figure, this number equals two in our example.</p>
 </div>
-<div id="step2-fit-efa-model" class="section level3">
-<h3>Step2: Fit EFA model</h3>
+<div id="step-2-fit-efa-model" class="section level3">
+<h3>Step 2: Fit EFA model</h3>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># fit a maximum likelihood-based EFA model by assuming two factors</span>
 fit.mle &lt;-<span class="st"> </span><span class="kw">fa</span>(COR, <span class="dt">nfactors =</span> <span class="dv">2</span>, <span class="dt">fm =</span> <span class="st">&quot;ml&quot;</span>, <span class="dt">max.iter =</span> <span class="dv">100</span>,
               <span class="dt">rotate =</span> <span class="st">&quot;varimax&quot;</span>)
@@ -358,7 +358,7 @@ DTF
 [<span class="dv">4</span>,]   <span class="fl">3.049506</span> <span class="op">-</span><span class="fl">0.019339391</span>
 [<span class="dv">5</span>,]  <span class="op">-</span><span class="fl">7.811509</span>  <span class="fl">0.023633191</span>
 [<span class="dv">6</span>,]  <span class="op">-</span><span class="fl">3.666438</span>  <span class="fl">0.010334994</span></code></pre></div>
-<p>The estimated factor scores for Area and RTP can be used as new phenotypes for subsequent analyses.</p>
+<p>The estimated factor scores for Area and RTP can be used as new phenotypes for subsequent genetic analyses.</p>
 </div>
 </div>
 <div id="references" class="section level2 unnumbered">
