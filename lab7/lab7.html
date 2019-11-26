@@ -124,6 +124,8 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <div id="load-r-packages" class="section level2">
 <h2>Load R packages</h2>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">Packages &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;dglm&quot;</span>, <span class="st">&quot;qqman&quot;</span>)
+<span class="co"># install.packages(&quot;dglm&quot;)</span>
+<span class="co"># install.packages(&quot;qqman&quot;)</span>
 <span class="kw">lapply</span>(Packages, library, <span class="dt">character.only =</span> <span class="ot">TRUE</span>)</code></pre></div>
 </div>
 <div id="read-data" class="section level2">
@@ -141,8 +143,7 @@ map &lt;-<span class="st"> </span><span class="kw">readRDS</span>(<span class="s
 <div id="define-a-dglm-function" class="section level2">
 <h2>Define a DGLM function</h2>
 <p>We first define a function that uses the <code>dglm</code> R package to fit a DGLM-based single-marker vGWAS model.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">my.pdglm &lt;-<span class="st"> </span><span class="cf">function</span>(cT, i, Phenos, geno, covar) {
-    y &lt;-<span class="st"> </span>Phenos[, cT]
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">my.pdglm &lt;-<span class="st"> </span><span class="cf">function</span>(i, y, geno, covar) {
     model &lt;-<span class="st"> </span><span class="kw">dglm</span>(y <span class="op">~</span><span class="st"> </span>geno[, i] <span class="op">+</span><span class="st"> </span>covar[, <span class="dv">2</span>] <span class="op">+</span><span class="st"> </span>covar[, <span class="dv">3</span>] <span class="op">+</span><span class="st"> </span>covar[, <span class="dv">4</span>] <span class="op">+</span><span class="st"> </span>covar[, <span class="dv">5</span>], <span class="op">~</span><span class="st"> </span>geno[, i], <span class="dt">family =</span> <span class="kw">gaussian</span>(<span class="dt">link =</span> identity))
     P.mean &lt;-<span class="st"> </span><span class="kw">summary</span>(model)<span class="op">$</span>coef[<span class="dv">2</span>, <span class="dv">4</span>]  <span class="co"># Extarct p values for mean part</span>
     P.disp &lt;-<span class="st"> </span><span class="kw">anova</span>(model)<span class="op">$</span>Adj.P[<span class="dv">2</span>]  <span class="co"># Extract P values for dispersion part</span>
@@ -157,10 +158,12 @@ map &lt;-<span class="st"> </span><span class="kw">readRDS</span>(<span class="s
 <div id="fit-a-dglm" class="section level2">
 <h2>Fit a DGLM</h2>
 <p>Apply the DGLM function we defined above to the wheat data.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">TF &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="ot">NA</span>, <span class="dt">nrow =</span> <span class="kw">dim</span>(geno)[<span class="dv">2</span>], <span class="dt">ncol =</span> <span class="dv">4</span>)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">y &lt;-<span class="st"> </span>pheno_data[,<span class="dv">5</span>]
+TF &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="ot">NA</span>, <span class="dt">nrow =</span> <span class="kw">dim</span>(geno)[<span class="dv">2</span>], <span class="dt">ncol =</span> <span class="dv">4</span>)
   <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="kw">dim</span>(geno)[<span class="dv">2</span>]) {
+  <span class="co">#for (i in 1:10) {</span>
     <span class="kw">try</span>({
-        outm &lt;-<span class="st"> </span><span class="kw">my.pdglm</span>(<span class="dt">cT =</span> <span class="dv">5</span>, <span class="dt">i =</span> i, <span class="dt">Phenos =</span> pheno_data, <span class="dt">geno =</span> geno, <span class="dt">covar =</span> covar)
+        outm &lt;-<span class="st"> </span><span class="kw">my.pdglm</span>(<span class="dt">i =</span> i, <span class="dt">y =</span> y, <span class="dt">geno =</span> geno, <span class="dt">covar =</span> covar)
         TF[i, ] &lt;-<span class="st"> </span><span class="kw">as.numeric</span>(outm)
         <span class="kw">print</span>(i)
     }, <span class="dt">silent =</span> <span class="ot">TRUE</span>)

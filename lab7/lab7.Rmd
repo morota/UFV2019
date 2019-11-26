@@ -20,6 +20,8 @@ This exercise illustrates how to perform variance heterogeneity genome-wide asso
 ## Load R packages
 ```{r, eval=FALSE, echo=TRUE}
 Packages <- c("dglm", "qqman")
+# install.packages("dglm")
+# install.packages("qqman")
 lapply(Packages, library, character.only = TRUE)
 ```
 
@@ -39,8 +41,7 @@ map <- readRDS("map_final.rds")
 ## Define a DGLM function
 We first define a function that uses the `dglm` R package to fit a DGLM-based single-marker vGWAS model. 
 ```{r, eval=FALSE, echo=TRUE}
-my.pdglm <- function(cT, i, Phenos, geno, covar) {
-    y <- Phenos[, cT]
+my.pdglm <- function(i, y, geno, covar) {
     model <- dglm(y ~ geno[, i] + covar[, 2] + covar[, 3] + covar[, 4] + covar[, 5], ~ geno[, i], family = gaussian(link = identity))
     P.mean <- summary(model)$coef[2, 4]  # Extarct p values for mean part
     P.disp <- anova(model)$Adj.P[2]  # Extract P values for dispersion part
@@ -57,10 +58,12 @@ my.pdglm <- function(cT, i, Phenos, geno, covar) {
 ## Fit a DGLM 
 Apply the DGLM function we defined above to the wheat data.  
 ```{r, eval=FALSE, echo=TRUE}
+y <- pheno_data[,5]
 TF <- matrix(NA, nrow = dim(geno)[2], ncol = 4)
   for (i in 1:dim(geno)[2]) {
+  #for (i in 1:10) {
     try({
-        outm <- my.pdglm(cT = 5, i = i, Phenos = pheno_data, geno = geno, covar = covar)
+        outm <- my.pdglm(i = i, y = y, geno = geno, covar = covar)
         TF[i, ] <- as.numeric(outm)
         print(i)
     }, silent = TRUE)
